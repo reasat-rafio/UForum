@@ -12,4 +12,7 @@ public class UserService {
     public List<User> getAllUsers(){
         return studentRepository.findAll();
     }
+    public List<User> saveUsers(User user){
+        return studentRepository.saveAll(List.of(user));
+    }
 }

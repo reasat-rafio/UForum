@@ -21,7 +21,7 @@ public class User {
     public User() {
     }
 
-    User(String email, String username, String password, Gender gender, LocalDateTime created, boolean verified) {
+    public User(String email, String username, String password, Gender gender, LocalDateTime created, boolean verified) {
         this.email = email;
         this.username = username;
         this.gender = gender;

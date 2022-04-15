@@ -1,8 +1,6 @@
 package com.example.server.user;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,4 +18,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @PostMapping("save")
+    public List<User>saveUser(@RequestBody User user){
+        return userService.saveUsers(user);
+    }
 }
+
+
