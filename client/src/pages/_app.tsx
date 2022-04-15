@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AnimatePresence } from "framer-motion";
 import { ManagedUIContext } from "@contexts/ui.context";
-import { Navbar } from "@components/navbar";
+import { Navbar } from "@components/navbar/navbar";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {
