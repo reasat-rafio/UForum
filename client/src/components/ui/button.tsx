@@ -43,7 +43,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>((props, ref) => {
     variant === "primary" &&
       "text-primary bg-light-gray hover:bg-light-gray-hover focus:ring-blue-200",
     variant === "secondary" &&
-      "text-white bg-secondary hover:bg-secondary-hover focus:ring-yellow-900",
+      "text-white bg-secondary hover:bg-secondary-hover focus:ring-yellow-400",
     loading && "cursor-not-allowed brightness-75",
     className
   );

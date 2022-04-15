@@ -19,7 +19,7 @@
       "@components/*": ["src/components/*"],
       "@styles/*": ["src/styles/*"],
       "@contexts/*": ["src/contexts/*"],
-      "@lib/*": ["src/lib/*"],
+      "@libs/*": ["src/libs/*"],
       "@utils/*": ["utils/*"],
       "@icons/*": ["src/icons/*"],
       "@scrollspy": ["src/components/common/scrollspy"]

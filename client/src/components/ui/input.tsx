@@ -10,12 +10,13 @@ export interface Props extends InputHTMLAttributes<HTMLInputElement> {
   errorKey?: string;
   type?: string;
   shadow?: boolean;
+  icon?: any;
 }
 
 const Input = React.forwardRef<HTMLInputElement, Props>(
   (
     {
-      className = "block",
+      className = "block relative",
       labelKey,
       name,
       errorKey,
@@ -23,6 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
       shadow = false,
       type = "text",
       inputClassName,
+      icon,
       ...rest
     },
     ref
@@ -53,6 +55,7 @@ const Input = React.forwardRef<HTMLInputElement, Props>(
           aria-invalid={errorKey ? "true" : "false"}
           {...rest}
         />
+        {icon && icon}
         {errorKey && <p className="my-2 text-xs text-red-500">{errorKey}</p>}
       </div>
     );
