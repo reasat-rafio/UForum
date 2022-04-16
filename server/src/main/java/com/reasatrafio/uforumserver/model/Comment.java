@@ -5,29 +5,20 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.util.List;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-public class Post {
+public class Comment {
     @Id
     private String id;
     @DBRef
-    User postedById;
-    private String name;
-    @Indexed(unique = true)
-    private String url;
-    private String description;
-    private Boolean removed;
+    User user;
+    String comment;
     private Number upvote;
     private Number downVote;
-    @DBRef
-    List<Comment> comments;
 }
