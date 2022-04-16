@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import java.time.LocalDateTime;
 
@@ -19,20 +20,19 @@ public class ServerApplication {
 
 	@Bean
 	CommandLineRunner runner(UserRepository repository, MongoTemplate mongoTemplate) {
-
 		return args -> {
-//			String email = "raf@gmail.com";
-//
-//			User user = new User(
-//					email,"rafio", "123122",
-//					Gender.MALE,  LocalDateTime.now(),
-//					false);
-//
-//			repository.findUserByEmail(email).ifPresentOrElse(s -> {
-//				System.out.println("Already exist");
-//			}, () -> {
-//				repository.insert(user);
-//			});
+			String email = "raf@gmail.com";
+
+			User user = new User(
+					email,"rafio", "123122",
+					Gender.MALE,  LocalDateTime.now(),
+					false);
+
+			repository.findUserByEmail(email).ifPresentOrElse(s -> {
+				System.out.println("Already exist");
+			}, () -> {
+				repository.insert(user);
+			});
 		};
 	}
 }

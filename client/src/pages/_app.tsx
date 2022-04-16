@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import { AnimatePresence } from "framer-motion";
 import { ManagedUIContext } from "@contexts/ui.context";
 import { Navbar } from "@components/navbar/navbar";
+import "@fontsource/roboto";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {

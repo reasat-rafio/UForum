@@ -16,6 +16,7 @@ module.exports = {
         "light-gray": "#EAEAEA",
         "light-gray-2": "#FAFAFA",
         "light-gray-hover": "#bababa",
+        "gray-primary": "#808080",
       },
     },
   },
