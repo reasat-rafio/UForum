@@ -21,7 +21,7 @@ public class Post {
     private String id;
     @DBRef
     User postedById;
-    private String name;
+    private String title;
     @Indexed(unique = true)
     private String url;
     private String description;

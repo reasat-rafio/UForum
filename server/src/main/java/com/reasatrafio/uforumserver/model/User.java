@@ -29,4 +29,8 @@ public class User {
     private boolean verified;
     @DBRef
     List<Post> posts;
+    @DBRef
+    List<Comment> comments;
+    @DBRef
+    List<Tag> followings;
 }
