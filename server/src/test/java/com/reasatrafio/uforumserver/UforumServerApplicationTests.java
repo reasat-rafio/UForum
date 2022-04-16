@@ -1,10 +1,10 @@
-package com.example.server;
+package com.reasatrafio.uforumserver;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ServerApplicationTests {
+class UforumServerApplicationTests {
 
 	@Test
 	void contextLoads() {
