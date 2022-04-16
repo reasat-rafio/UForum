@@ -1,10 +1,13 @@
 import Button from "@components/ui/button";
+import { useRouter } from "next/router";
 import React from "react";
 import { HamburgerCTA } from "./hamburger-cta";
 
 interface NavbarProps {}
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
+  const router = useRouter();
+
   return (
     <nav className="bg-white border-gray-200 px-2 sm:px-4 py-5 rounded dark:bg-white shadow-md">
       <div className="container flex flex-wrap justify-between items-center mx-auto">
@@ -26,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               position: "left",
               component: <img src="/icons/user-plus.svg" alt="register icon" />,
             }}
+            onClick={() => router.push("/auth/register")}
           >
             Register
           </Button>

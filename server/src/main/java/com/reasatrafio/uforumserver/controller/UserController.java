@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
+import java.util.Optional;
 
 
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
     @Autowired
     private UserRepository userRepo;
+    BCryptPasswordEncoder b = new BCryptPasswordEncoder();
 
     @GetMapping("/users")
     public ResponseEntity<?> getAllUsers(){
@@ -29,8 +31,39 @@ public class UserController {
         }
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<?> createTodo(@RequestBody User user){
+    @GetMapping("/user/{id}")
+    public ResponseEntity<?> getUser(@PathVariable String id){
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Optional<User> findUserById = userRepo.findById(id);
+
+        if(findUserById.isEmpty()){
+            responseInJSON.put("message", "Username not found");
+            return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<User>(findUserById.get(), HttpStatus.OK);
+    }
+
+
+    @GetMapping("/user/login")
+    public ResponseEntity<?> getUser(@RequestBody User user){
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        try {
+            List<User> findUserByEmail =  userRepo.findByEmail(user.getEmail());
+            boolean passwordMatched = b.matches(user.getPassword(), findUserByEmail.get(0).getPassword());
+            if(!passwordMatched){
+                responseInJSON.put("message", "Password is incorrect");
+                return  new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
+            }
+            return new ResponseEntity<List<User>>(findUserByEmail, HttpStatus.NOT_FOUND);
+
+        }catch (IndexOutOfBoundsException e){
+            responseInJSON.put("message", "Email is not registered");
+            return  new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @PostMapping("/user/register")
+    public ResponseEntity<?> createUser(@RequestBody User user){
         try{
             List<User> checkUserByEmail  = userRepo.findByEmail(user.getEmail());
             List<User> checkUserByUsername = userRepo.findByUsername(user.getUsername());
@@ -52,12 +85,23 @@ public class UserController {
             userRepo.save(user);
             return new ResponseEntity<User>(user, HttpStatus.OK);
         }catch (Exception e){
-            return  new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-//    @GetMapping("/users/{id}")
-//    public ResponseEntity<?> getSingleUser(@PathVariable("id") String id){
-//
-//    }
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable("id") String id, @RequestBody User user){
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Optional<User> findUserById = userRepo.findById(id);
+
+        if(findUserById.isEmpty()){
+            responseInJSON.put("message", "Username not found");
+            return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        }
+
+        User userToSave = findUserById.get();
+        userToSave.setUsername(user.getUsername() != null ? user.getUsername() : userToSave.getUsername());
+        userRepo.save(userToSave);
+        return new ResponseEntity<User>(userToSave, HttpStatus.OK);
+    }
 }

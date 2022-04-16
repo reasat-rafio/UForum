@@ -4,6 +4,8 @@ import type { NextPage } from "next";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpSchema } from "@libs/input-schema";
+import axios from "axios";
+import { useUI } from "@contexts/ui.context";
 
 interface IFormInput {
   email: string;
@@ -13,6 +15,8 @@ interface IFormInput {
 }
 
 const Register: NextPage = () => {
+  const { setPageLoading } = useUI();
+
   const {
     register,
     handleSubmit,
@@ -22,13 +26,21 @@ const Register: NextPage = () => {
     resolver: yupResolver(SignUpSchema),
   });
 
-  function onSubmit({
-    email,
-    password,
-    confirmPassword,
-    username,
-  }: IFormInput) {
-    console.log(email, password, confirmPassword, username, "data");
+  async function onSubmit({ email, password, username }: IFormInput) {
+    setPageLoading(true);
+    try {
+      const data = await axios.post("http://localhost:8080/users", {
+        email,
+        password,
+        username,
+        verified: false,
+      });
+      console.log(data);
+    } catch (error: any) {
+      console.log(error.response);
+    } finally {
+      setPageLoading(false);
+    }
   }
 
   return (

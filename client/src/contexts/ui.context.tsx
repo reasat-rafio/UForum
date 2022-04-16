@@ -1,17 +1,13 @@
 import React, { createContext, useContext, useState } from "react";
 
-interface IIsloading {
-  state: boolean;
-  text?: null | string;
-}
 export interface UIStateProps {
   displaySidebar: boolean;
   displayFilter: boolean;
   displayModal: boolean;
   modalData: unknown;
   toastText: string;
-  isPageLoading: IIsloading;
-  isComponentLoading: IIsloading;
+  isPageLoading: boolean;
+  isComponentLoading: boolean;
 
   openSidebar: () => void;
   closeSidebar: () => void;
@@ -21,8 +17,8 @@ export interface UIStateProps {
   closeFilter: () => void;
   openModal: () => void;
   closeModal: () => void;
-  setPageLoading: (props: IIsloading) => void;
-  setComponentLoading: (props: IIsloading) => void;
+  setPageLoading: (props: boolean) => void;
+  setComponentLoading: (props: boolean) => void;
 }
 
 const UIContext = createContext<UIStateProps | unknown>(null);
@@ -34,14 +30,8 @@ export const UIProvider: React.FC = (props) => {
   const [displayModal, setDisplayModal] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [toastText, _setToastText] = useState("");
-  const [isPageLoading, _setPageLoading] = useState<IIsloading>({
-    state: false,
-    text: null,
-  });
-  const [isComponentLoading, _setComponentLoading] = useState<IIsloading>({
-    state: false,
-    text: null,
-  });
+  const [isPageLoading, _setPageLoading] = useState<boolean>(false);
+  const [isComponentLoading, _setComponentLoading] = useState<boolean>(false);
 
   const openSidebar = () => setDisplaySidebar(true);
   const closeSidebar = () => setDisplaySidebar(false);
@@ -53,9 +43,8 @@ export const UIProvider: React.FC = (props) => {
   const openModal = () => setDisplayModal(true);
   const closeModal = () => setDisplayModal(false);
   const setToastText = (text: string) => _setToastText(text);
-  const setPageLoading = (props: IIsloading) => _setPageLoading(props);
-  const setComponentLoading = (props: IIsloading) =>
-    _setComponentLoading(props);
+  const setPageLoading = (props: boolean) => _setPageLoading(props);
+  const setComponentLoading = (props: boolean) => _setComponentLoading(props);
 
   const value = React.useMemo(
     () => ({
