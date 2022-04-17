@@ -25,7 +25,6 @@ public class User {
     @Indexed(unique = true)
     private String username;
     private String password;
-    private Date createdAt;
     private boolean verified;
     @DBRef
     List<Post> posts;
@@ -33,4 +32,6 @@ public class User {
     List<Comment> comments;
     @DBRef
     List<Tag> followings;
+    private Date createdAt;
+    private Date updatedAt;
 }

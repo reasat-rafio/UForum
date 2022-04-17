@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 
 @Setter
@@ -25,4 +26,6 @@ public class Tag {
     List<Post> posts;
     @DBRef
     List<User> followedBy;
+    private Date createdAt;
+    private Date updatedAt;
 }

@@ -31,8 +31,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<?> getUser(@PathVariable String id){
+    @GetMapping("/users/{id}")
+    public ResponseEntity<?> getSingleUser(@PathVariable String id){
         HashMap<String, String> responseInJSON = new HashMap<>();
         Optional<User> findUserById = userRepo.findById(id);
 
