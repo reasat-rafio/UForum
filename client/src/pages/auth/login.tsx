@@ -38,7 +38,6 @@ const Login: NextPage = () => {
         password,
         email,
       });
-
       setUserAction(data.data[0]);
       reset();
       router.push("/");

@@ -21,3 +21,8 @@ export const LoginSchema = yup.object().shape({
   email: yup.string().email("Please enter a correct email").required(),
   password: yup.string().required(),
 });
+
+export const PostSchema = yup.object().shape({
+  title: yup.string().required(),
+  description: yup.string().required(),
+});
