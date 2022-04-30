@@ -2,7 +2,6 @@ import Button from "@components/ui/button";
 import { useUser } from "@contexts/user.conext";
 import { useWindowScroll } from "@libs/hooks";
 import clsx from "clsx";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { HamburgerCTA } from "./hamburger-cta";
@@ -29,7 +28,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
         scroll ? "shadow-md py-5" : "shadow-sm py-6"
       )}
     >
-      <div className="container flex flex-wrap justify-between items-center mx-auto">
+      <div className="section__container flex flex-wrap justify-between items-center">
         <a
           href="/"
           className={clsx(

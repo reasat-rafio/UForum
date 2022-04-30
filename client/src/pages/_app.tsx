@@ -18,7 +18,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AuthContext>
         <ManagedUIContext>
           <Navbar />
-          <Component {...pageProps} />;
+          <Component {...pageProps} />
         </ManagedUIContext>
       </AuthContext>
     </AnimatePresence>
