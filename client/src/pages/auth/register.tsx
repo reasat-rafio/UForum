@@ -8,6 +8,7 @@ import axios from "axios";
 import { useUI } from "@contexts/ui.context";
 import { useUser } from "@contexts/user.conext";
 import Router, { useRouter } from "next/router";
+import Link from "next/link";
 
 interface IFormInput {
   email: string;
@@ -191,9 +192,9 @@ const Register: NextPage = () => {
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-500">
               Already have an account?
-              <a className="underline hover:text-secondary" href="">
-                Sign in
-              </a>
+              <Link href="/auth/login">
+                <a className="underline hover:text-secondary">Login</a>
+              </Link>
             </p>
 
             <Button type="submit" variant="secondary">

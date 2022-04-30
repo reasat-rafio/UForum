@@ -131,7 +131,9 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
               >
                 Register
               </Button>
-              <Button type="submit">Login</Button>
+              <Button onClick={() => router.push("/auth/login")} type="submit">
+                Login
+              </Button>
             </>
           )}
 
