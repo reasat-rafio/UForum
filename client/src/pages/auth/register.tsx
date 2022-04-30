@@ -6,6 +6,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { SignUpSchema } from "@libs/input-schema";
 import axios from "axios";
 import { useUI } from "@contexts/ui.context";
+import { useUser } from "@contexts/user.conext";
+import Router, { useRouter } from "next/router";
 
 interface IFormInput {
   email: string;
@@ -16,11 +18,15 @@ interface IFormInput {
 
 const Register: NextPage = () => {
   const { setPageLoading } = useUI();
+  const { setUserAction } = useUser();
+
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IFormInput>({
     mode: "onChange",
     resolver: yupResolver(SignUpSchema),
@@ -29,13 +35,16 @@ const Register: NextPage = () => {
   async function onSubmit({ email, password, username }: IFormInput) {
     setPageLoading(true);
     try {
-      const data = await axios.post("http://localhost:8080/users", {
+      const data = await axios.post("http://localhost:8080/user/register", {
         email,
         password,
         username,
         verified: false,
       });
-      console.log(data);
+
+      setUserAction(data.data);
+      reset();
+      router.push("/");
     } catch (error: any) {
       console.log(error.response);
     } finally {

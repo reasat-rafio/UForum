@@ -14,7 +14,7 @@ const profileDropDown = [
 ];
 
 export const Navbar: React.FC<NavbarProps> = ({}) => {
-  const { user } = useUser();
+  const { user, removeUserAction } = useUser();
 
   const router = useRouter();
   const scroll = useWindowScroll()?.y ?? 0;
@@ -88,16 +88,22 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                   >
                     <div className="py-3 px-4">
                       <span className="block text-sm text-gray-900 dark:text-white">
-                        Bonnie Green
+                        {user.username}
                       </span>
                       <span className="block text-sm font-medium text-gray-500 truncate dark:text-gray-400">
-                        name@flowbite.com
+                        {user.email}
                       </span>
                     </div>
                     <ul className="py-1" aria-labelledby="dropdown">
                       {profileDropDown.map(({ name, url }) => (
                         <li key={name}>
                           <a
+                            onClick={(e) => {
+                              if (name === "Sign Out") {
+                                e.preventDefault();
+                                removeUserAction();
+                              }
+                            }}
                             href={url}
                             className="block py-2 px-4 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
                           >
