@@ -31,6 +31,6 @@ public class Post {
     private Number downVote;
     @DBRef
     List<Comment> comments;
-    private String password;
     private Date createdAt;
+    private Date updatedAt;
 }

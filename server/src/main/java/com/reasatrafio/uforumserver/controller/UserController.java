@@ -37,7 +37,7 @@ public class UserController {
         Optional<User> findUserById = userRepo.findById(id);
 
         if(findUserById.isEmpty()){
-            responseInJSON.put("message", "Username not found");
+            responseInJSON.put("message", "User not found");
             return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<User>(findUserById.get(), HttpStatus.OK);
@@ -82,6 +82,7 @@ public class UserController {
             String hashPassword = new BCryptPasswordEncoder().encode(user.getPassword());
             user.setPassword(hashPassword);
             user.setCreatedAt(new Date(System.currentTimeMillis()));
+            user.setVerified(false);
             userRepo.save(user);
             return new ResponseEntity<User>(user, HttpStatus.OK);
         }catch (Exception e){

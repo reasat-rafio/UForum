@@ -4,6 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { ManagedUIContext } from "@contexts/ui.context";
 import { Navbar } from "@components/navbar/navbar";
 import "@fontsource/roboto";
+import AuthContext from "@contexts/user.conext";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {
@@ -14,10 +15,12 @@ function handleExitComplete() {
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
-      <ManagedUIContext>
-        <Navbar />
-        <Component {...pageProps} />;
-      </ManagedUIContext>
+      <AuthContext>
+        <ManagedUIContext>
+          <Navbar />
+          <Component {...pageProps} />;
+        </ManagedUIContext>
+      </AuthContext>
     </AnimatePresence>
   );
 }

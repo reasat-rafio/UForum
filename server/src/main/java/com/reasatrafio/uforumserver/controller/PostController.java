@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -48,9 +49,11 @@ public class PostController {
         HashMap<String, String> responseInJSON = new HashMap<>();
         Optional<User> userExist = userRepo.findById(post.getPostedById().getId());
         if(userExist.isPresent()){
-            // SAVE THE POST
+            // SAVE THE POST8u
             post.setUpvote(1);
             post.setDownVote(0);
+            post.setRemoved(false);
+            post.setCreatedAt(new Date(System.currentTimeMillis()));
             postRepo.save(post);
 
             // UPDATE THE USER
