@@ -1,4 +1,4 @@
-import { Form } from "@components/question/form";
+import { Form } from "@components/post/form";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import type { NextPage } from "next";
 

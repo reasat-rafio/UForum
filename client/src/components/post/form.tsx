@@ -9,6 +9,7 @@ import "@pathofdev/react-tag-input/build/index.css";
 import { useUI } from "@contexts/ui.context";
 import axios from "axios";
 import { useUser } from "@contexts/user.conext";
+import { useRouter } from "next/router";
 
 interface IFormInput {
   title: string;
@@ -30,6 +31,8 @@ export const Form: React.FC<FormProps> = ({ className }) => {
     resolver: yupResolver(PostSchema),
   });
 
+  const router = useRouter();
+
   const { setPageLoading } = useUI();
   const { user, setUserAction } = useUser();
   const [tags, setTags] = React.useState<string[]>([]);
@@ -43,7 +46,11 @@ export const Form: React.FC<FormProps> = ({ className }) => {
         description,
         tags,
       });
+      console.log(data.user);
+
       setUserAction(data.user);
+      // router.push("/");
+      // reset();
     } catch (error: any) {
       console.log(error.response);
     } finally {
