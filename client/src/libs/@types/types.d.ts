@@ -21,6 +21,7 @@ interface IPost {
   comments: IComment[];
   createdAt: string;
   updatedAt: string;
+  tags?: string[];
 }
 
 interface IComment {
