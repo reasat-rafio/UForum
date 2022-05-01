@@ -3,7 +3,7 @@ import * as yup from "yup";
 export const SignUpSchema = yup.object().shape({
   username: yup
     .string()
-    .max(12, "username can't be larger than 12 chars")
+    .max(30, "username can't be larger than 12 chars")
     .min(2, "username should be bigger than 2 chars")
     .required(),
   email: yup.string().email("Please enter a correct email").required(),

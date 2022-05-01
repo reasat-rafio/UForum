@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
+import java.util.List;
 
 @Setter
 @Getter
@@ -27,6 +28,10 @@ public class Comment {
     private Number downVote;
     @DBRef
     Comment reply;
+    @DBRef
+    List<User> likedBy;
+    @DBRef
+    List<User> dislikedBy;
     private Date createdAt;
     private Date updatedAt;
 }

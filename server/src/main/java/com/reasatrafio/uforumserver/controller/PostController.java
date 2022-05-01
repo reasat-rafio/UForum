@@ -47,13 +47,18 @@ public class PostController {
     @PostMapping("post/submit")
     public ResponseEntity<?> submit(@RequestBody Post post){
         HashMap<String, String> responseInJSON = new HashMap<>();
-         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
+        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
         Optional<User> userExist = userRepo.findById(post.getPostedById().getId());
-        if(userExist.isPresent()){
+        if (userExist.isPresent()) {
+            
+            List<User> postLikedBy = new ArrayList<User>();
+            postLikedBy.add(userExist.get());
+            
             // SAVE THE POST
             post.setUpvote(1);
             post.setDownVote(0);
             post.setRemoved(false);
+            post.setLikedBy(postLikedBy);
             post.setCreatedAt(new Date(System.currentTimeMillis()));
             postRepo.save(post);
 

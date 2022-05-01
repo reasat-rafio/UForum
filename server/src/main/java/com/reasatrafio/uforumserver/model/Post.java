@@ -26,6 +26,10 @@ public class Post {
     private String id;
     @DBRef
     User postedById;
+    @DBRef
+    List<User> likedBy;
+    @DBRef
+    List<User> dislikedBy;
     private String title;
     @Indexed(unique = true)
     private String url;

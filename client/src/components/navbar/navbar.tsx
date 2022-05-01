@@ -2,6 +2,7 @@ import Button from "@components/ui/button";
 import { useUser } from "@contexts/user.conext";
 import { useWindowScroll } from "@libs/hooks";
 import clsx from "clsx";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { HamburgerCTA } from "./hamburger-cta";
@@ -25,26 +26,28 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
     <nav
       className={clsx(
         "bg-white border-gray-200 px-2 sm:px-4 rounded dark:bg-white fixed w-full transition-all duration-300 z-20 top-0",
-        scroll ? "shadow-md py-5" : "shadow-sm py-6"
+        scroll ? "shadow-md py-3" : "shadow-sm py-6"
       )}
     >
       <div className="section__container flex flex-wrap justify-between items-center">
-        <a
-          href="/"
-          className={clsx(
-            "flex items-center transition-all duration-300",
-            scroll ? "scale-100" : "scale-125"
-          )}
-        >
-          <img
-            src="/icons/logo.svg"
-            className="mr-3 h-6 sm:h-9"
-            alt="UForum Logo"
-          />
-          <span className="self-center text-xl whitespace-nowrap dark:text-back">
-            <span className="font-bold text-secondary">U</span>Forum
-          </span>
-        </a>
+        <Link href="/">
+          <a
+            className={clsx(
+              "flex items-center transition-all duration-300",
+              scroll ? "scale-100" : "scale-125"
+            )}
+          >
+            <img
+              src="/icons/logo.svg"
+              className="mr-3 h-6 sm:h-9"
+              alt="UForum Logo"
+            />
+            <span className="self-center text-xl whitespace-nowrap dark:text-back">
+              <span className="font-bold text-secondary">U</span>Forum
+            </span>
+          </a>
+        </Link>
+
         <div className="flex space-x-4">
           {user ? (
             <>
@@ -72,7 +75,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
                 >
                   <img
                     className="w-9 h-9 rounded-full border border-gray-600"
-                    src="/profile-pic.png"
+                    src={user?.imageUrl}
                     alt="user photo"
                   />
 

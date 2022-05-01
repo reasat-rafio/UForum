@@ -29,10 +29,19 @@ public class User {
     private String username;
     private String password;
     private boolean verified;
+    private String imageUrl;
     @DBRef
     List<Post> posts;
     @DBRef
+    List<Post> likedPost;
+    @DBRef
+    List<Post> dislikedPost;
+    @DBRef
     List<Comment> comments;
+    @DBRef
+    List<Comment> likedComments;
+    @DBRef
+    List<Comment> dislikedComments;
     @DBRef
     List<Tag> followings;
     private Date createdAt;

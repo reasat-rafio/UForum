@@ -36,13 +36,20 @@ const Register: NextPage = () => {
   async function onSubmit({ email, password, username }: IFormInput) {
     setPageLoading(true);
     try {
+      const imageUrl = `https://avatars.dicebear.com/api/croodles/${Math.floor(
+        Math.random() * 10000
+      )}.svg`;
+
       const data = await axios.post("http://localhost:8080/user/register", {
         email,
         password,
         username,
         verified: false,
+        imageUrl,
       });
-
+      console.log("====================================");
+      console.log(data.data);
+      console.log("====================================");
       setUserAction(data.data);
       reset();
       router.push("/");

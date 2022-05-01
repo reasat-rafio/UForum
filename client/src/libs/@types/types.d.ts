@@ -8,6 +8,7 @@ interface IUser {
   followings: ITag[];
   createdAt: string;
   updatedAt: string;
+  imageUrl: string;
 }
 
 interface IPost {
