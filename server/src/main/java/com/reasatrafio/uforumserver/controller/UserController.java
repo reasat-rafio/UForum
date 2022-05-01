@@ -1,5 +1,7 @@
 package com.reasatrafio.uforumserver.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reasatrafio.uforumserver.model.User;
 import com.reasatrafio.uforumserver.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @RestController
@@ -25,9 +24,9 @@ public class UserController {
     public ResponseEntity<?> getAllUsers(){
         List<User> users = userRepo.findAll();
         if(users.size() > 0){
-            return  new ResponseEntity<List<User>>(users, HttpStatus.OK);
+            return new ResponseEntity<List<User>>(users, HttpStatus.OK);
         } else {
-            return  new ResponseEntity<>("No User Found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No User Found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -43,8 +42,7 @@ public class UserController {
         return new ResponseEntity<User>(findUserById.get(), HttpStatus.OK);
     }
 
-
-    @GetMapping("/user/login")
+    @PostMapping("/user/login")
     public ResponseEntity<?> getUser(@RequestBody User user){
         HashMap<String, String> responseInJSON = new HashMap<>();
         try {
@@ -54,11 +52,18 @@ public class UserController {
                 responseInJSON.put("message", "Password is incorrect");
                 return  new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
             }
-            return new ResponseEntity<List<User>>(findUserByEmail, HttpStatus.NOT_FOUND);
+
+            ObjectMapper mapper = new ObjectMapper();
+            String serialized = mapper.writeValueAsString(findUserByEmail.get(0));
+            System.out.println("serialized" + serialized);
+            return new ResponseEntity<String>(serialized, HttpStatus.OK);
 
         }catch (IndexOutOfBoundsException e){
             responseInJSON.put("message", "Email is not registered");
             return  new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
+        }
+        catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 

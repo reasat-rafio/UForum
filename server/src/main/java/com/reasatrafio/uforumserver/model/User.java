@@ -1,5 +1,7 @@
 package com.reasatrafio.uforumserver.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
+@JsonIdentityInfo(scope=User.class, generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class User {
     @Id
     private String id;
@@ -34,4 +37,20 @@ public class User {
     List<Tag> followings;
     private Date createdAt;
     private Date updatedAt;
+
+    @Override
+    public String toString() {
+        return "[{" +
+                "id:'" + id + '\'' +
+                ", email:'" + email + '\'' +
+                ", username:'" + username + '\'' +
+                ", password:'" + password + '\'' +
+                ", verified:" + verified +
+                ", posts:" + posts +
+                ", comments:" + comments +
+                ", followings:" + followings +
+                ", createdAt:" + createdAt +
+                ", updatedAt:" + updatedAt +
+                "}]";
+    }
 }

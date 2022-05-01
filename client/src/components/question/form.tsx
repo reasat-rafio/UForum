@@ -31,19 +31,19 @@ export const Form: React.FC<FormProps> = ({ className }) => {
   });
 
   const { setPageLoading } = useUI();
-  const { user } = useUser();
+  const { user, setUserAction } = useUser();
   const [tags, setTags] = React.useState<string[]>([]);
 
   async function onSubmit({ title, description }: IFormInput) {
     setPageLoading(true);
     try {
-      const data = await axios.post("http://localhost:8080/post/submit", {
+      const { data } = await axios.post("http://localhost:8080/post/submit", {
         postedById: user,
         title,
         description,
         tags,
       });
-      console.log(data);
+      setUserAction(data.user);
     } catch (error: any) {
       console.log(error.response);
     } finally {

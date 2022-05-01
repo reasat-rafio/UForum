@@ -2,7 +2,7 @@ import { Form } from "@components/question/form";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import type { NextPage } from "next";
 
-const Question: NextPage = () => {
+const Submit: NextPage = () => {
   return (
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 pt-32">
@@ -19,4 +19,4 @@ const Question: NextPage = () => {
   );
 };
 
-export default Question;
+export default Submit;

@@ -49,6 +49,7 @@ export const Navbar: React.FC<NavbarProps> = ({}) => {
           {user ? (
             <>
               <Button
+                onClick={() => router.push("/post/submit")}
                 variant="secondary"
                 icon={{
                   position: "left",

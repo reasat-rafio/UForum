@@ -1,5 +1,8 @@
 package com.reasatrafio.uforumserver.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.reasatrafio.uforumserver.model.Post;
 import com.reasatrafio.uforumserver.model.User;
 import com.reasatrafio.uforumserver.repository.PostRepository;
@@ -9,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -47,9 +47,10 @@ public class PostController {
     @PostMapping("post/submit")
     public ResponseEntity<?> submit(@RequestBody Post post){
         HashMap<String, String> responseInJSON = new HashMap<>();
+         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
         Optional<User> userExist = userRepo.findById(post.getPostedById().getId());
         if(userExist.isPresent()){
-            // SAVE THE POST8u
+            // SAVE THE POST
             post.setUpvote(1);
             post.setDownVote(0);
             post.setRemoved(false);
@@ -57,11 +58,27 @@ public class PostController {
             postRepo.save(post);
 
             // UPDATE THE USER
-            List<Post> allPost = userExist.get().getPosts();
-            allPost.add(post);
-            userExist.get().setPosts(allPost);
-            userRepo.save(userExist.get());
-            return new ResponseEntity<Post>(post, HttpStatus.OK);
+            List<Post> allPostSubmittedByTheUser = userExist.get().getPosts();
+            List<Post> emptyPostList = new ArrayList<>();
+            if(allPostSubmittedByTheUser == null) {
+                emptyPostList.add(post);
+                userExist.get().setPosts(emptyPostList);
+                userRepo.save(userExist.get());
+            } else {
+                allPostSubmittedByTheUser.add(post);
+                userExist.get().setPosts(allPostSubmittedByTheUser);
+                userRepo.save(userExist.get());
+            }
+            successResponseInJson.put("user", userExist.get());
+            successResponseInJson.put("post", post);
+
+             ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+            try {
+                return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
         responseInJSON.put("message", "User Doesn't Exist");
         return  new ResponseEntity< HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
