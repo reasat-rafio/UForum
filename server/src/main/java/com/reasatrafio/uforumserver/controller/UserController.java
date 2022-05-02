@@ -51,7 +51,7 @@ public class UserController {
             boolean passwordMatched = b.matches(user.getPassword(), findUserByEmail.get(0).getPassword());
             if(!passwordMatched){
                 responseInJSON.put("message", "Password is incorrect");
-                return  new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
+                return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_ACCEPTABLE);
             }
 
             ObjectMapper mapper = new ObjectMapper();
