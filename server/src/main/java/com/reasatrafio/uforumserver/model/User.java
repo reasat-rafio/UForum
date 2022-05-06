@@ -46,20 +46,4 @@ public class User {
     List<Tag> followings;
     private Date createdAt;
     private Date updatedAt;
-
-    @Override
-    public String toString() {
-        return "[{" +
-                "id:'" + id + '\'' +
-                ", email:'" + email + '\'' +
-                ", username:'" + username + '\'' +
-                ", password:'" + password + '\'' +
-                ", verified:" + verified +
-                ", posts:" + posts +
-                ", comments:" + comments +
-                ", followings:" + followings +
-                ", createdAt:" + createdAt +
-                ", updatedAt:" + updatedAt +
-                "}]";
-    }
 }

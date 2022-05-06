@@ -12,12 +12,17 @@ export const Post: React.FC<IPost> = ({
   tags,
   downVote,
   upvote,
+  id,
 }) => {
   const { user } = useUser();
 
   return (
     <div className="bg-white rounded p-8 space-y-5">
-      <PostHeader username={user?.username} createdAt={createdAt} />
+      <PostHeader
+        username={user?.username}
+        createdAt={createdAt}
+        profilePicture={user?.imageUrl}
+      />
       <div className="space-y-5">
         <h2 className="font-[700] text-xl">{title}</h2>
         <p className="text-base">{description}</p>
@@ -33,7 +38,7 @@ export const Post: React.FC<IPost> = ({
         </ul>
       </div>
       <div className="w-full h-[1px] bg-slate-200" />
-      <PostCTA downVote={downVote} upvote={upvote} />
+      <PostCTA id={id} downVote={downVote} upvote={upvote} />
     </div>
   );
 };

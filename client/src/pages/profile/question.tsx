@@ -12,11 +12,13 @@ const Question: NextPage = () => {
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
         <div className="col-span-9 mx-10 flex flex-col space-y-4">
-          {user?.posts
-            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-            .map((post) => (
-              <Post key={post.id} {...post} />
-            ))}
+          {user?.posts?.length ? (
+            user?.posts
+              .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+              .map((post) => <Post key={post.id} {...post} />)
+          ) : (
+            <div>No post Found</div>
+          )}
         </div>
 
         <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">

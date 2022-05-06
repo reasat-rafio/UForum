@@ -28,7 +28,6 @@ export default function AuthContext({ children }: Props): ReactElement {
     "users",
     null
   );
-  console.log(user);
 
   useEffect(() => {
     checkUser();

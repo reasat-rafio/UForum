@@ -9,6 +9,10 @@ interface IUser {
   createdAt: string;
   updatedAt: string;
   imageUrl: string;
+  likedComments?: IComment[];
+  likedComments?: IComment[];
+  likedPost?: IPost[];
+  dislikedPost?: IPost[];
 }
 
 interface IPost {
@@ -23,6 +27,8 @@ interface IPost {
   createdAt: string;
   updatedAt: string;
   tags?: string[];
+  likedBy?: IUser[];
+  dilikedBy?: IUser[];
 }
 
 interface IComment {
@@ -34,6 +40,10 @@ interface IComment {
   reply?: IComment;
   createdAt: string;
   updatedAt: string;
+  upvote: number;
+  downVote: number;
+  likedBy?: IPost[];
+  dislikedBy?: IPost[];
 }
 
 interface ITag {

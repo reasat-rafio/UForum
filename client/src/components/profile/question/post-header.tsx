@@ -9,12 +9,16 @@ import React from "react";
 interface PostHeaderProps {
   createdAt: string;
   username: string | undefined;
+  profilePicture: string | undefined;
 }
 
 export const PostHeader: React.FC<PostHeaderProps> = ({
   createdAt,
   username,
+  profilePicture,
 }) => {
+  console.log(profilePicture);
+
   const date = new Date(+createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED
@@ -34,8 +38,8 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
       <div className="flex-1 flex space-x-3">
         <img
           className="h-12 w-12 rounded-full"
-          src="/profile-pic.png"
-          alt={username}
+          src={profilePicture}
+          alt={`${username}'s image`}
         />
         <div className="flex flex-col space-y-1">
           <span className="text-[13px]">@{username}</span>

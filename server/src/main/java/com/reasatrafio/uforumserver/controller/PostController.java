@@ -105,70 +105,83 @@ public class PostController {
         return new ResponseEntity<Post>(postToDelete, HttpStatus.OK);
     }
 
-    @PutMapping("/post/upvote/{id}")
-    public ResponseEntity<?> upvote(@PathVariable("id") String id, @RequestBody User user) {
+   @PostMapping("/post/upvote/{id}")
+   public ResponseEntity<?> upvote(@RequestBody String userId, @PathVariable("id") String id) {
+        userId = userId.substring(0, userId.length() - 1);
         boolean userAlreadyUpvoted = false;
         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
-    HashMap<String, String> responseInJSON = new HashMap<>();
+        HashMap<String, String> responseInJSON = new HashMap<>();
         Optional<Post> findPostById = postRepo.findById(id);
+        Optional<User> findUserById = userRepo.findById(userId);
+        User user = findUserById.get();
+        
+       if (findPostById.isEmpty()) {
+            responseInJSON.put("message", "Post not found");
+            return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        }
 
-            if (findPostById.isEmpty()) {
-                responseInJSON.put("message", "Post not found");
-                return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
-            }
+        /* CHECK IF THE USER EVER LIKED ANY POST 
+            @REASON: if the user never liked anything then user.getLikedPost().size() will return null
+        */
+        List<Post> userLikedPostList = new ArrayList<>();
+        if (user.getLikedPost() == null) {
+            userLikedPostList.add(findPostById.get());
+        } else {
+            userLikedPostList = user.getLikedPost();
+        }
 
-            // CHECK IF THE USER ALREADY UPVOTED THIS POST
-            for (int i = 0; i < user.getLikedPost().size(); i++ ){
-                if (user.getLikedPost().get(i).getId() == findPostById.get().getId()) {
-                    userAlreadyUpvoted = true;
-                    break;
-                } else{
-                    userAlreadyUpvoted = false;
-                }
-            }
-
-            // GET ALL THE LIKED POST BY USER
-            List<Post> getallLikedPostByUser = user.getLikedPost();
-            List<Post> likedPostByUser = new ArrayList<>();
-
-            // UPDATE THE POST AND THE USER
-            if (!userAlreadyUpvoted) {
-                findPostById.get().getLikedBy().add(user);
-                user.getLikedPost();
-                // user.setLikedPost(findPostById.get());
-                findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() + 1));
-
-                // IF THE USER NEVER LIKED ANY POST
-                if(getallLikedPostByUser == null){
-                    likedPostByUser.add(findPostById.get());
-                    user.setLikedPost(likedPostByUser);
-                    userRepo.save(user);
-                } else {
-                    getallLikedPostByUser.add(findPostById.get());
-                    user.setLikedPost(likedPostByUser);
-                    userRepo.save(user);
-                }
-                postRepo.save(findPostById.get());
+        // CHECK IF THE USER ALREADY UPVOTED THIS POST
+        for (int i = 0; i < userLikedPostList.size(); i++) {
+            if (userLikedPostList.get(i).getId() == findPostById.get().getId()) {
+                userAlreadyUpvoted = true;
+                break;
             } else {
-                findPostById.get().getLikedBy().removeIf((value) -> value.getId() == user.getId());
-                findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() - 1));
-                getallLikedPostByUser.removeIf((post) -> post.getId() == findPostById.get().getId());
+                userAlreadyUpvoted = false;
+            }
+        }
+
+        // GET ALL THE LIKED POST BY USER
+        List<Post> getallLikedPostByUser = userLikedPostList;
+        List<Post> likedPostByUser = new ArrayList<>();
+
+        // UPDATE THE POST AND THE USER
+        if (!userAlreadyUpvoted) {
+            findPostById.get().getLikedBy().add(user);
+            findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() + 1));
+
+            // IF THE USER NEVER LIKED ANY POST
+            if (getallLikedPostByUser == null) {
+                likedPostByUser.add(findPostById.get());
                 user.setLikedPost(likedPostByUser);
                 userRepo.save(user);
-                postRepo.save(findPostById.get());
+            } else {
+                getallLikedPostByUser.add(findPostById.get());
+                user.setLikedPost(likedPostByUser);
+                userRepo.save(user);
             }
+            postRepo.save(findPostById.get());
+        } else {
+            findPostById.get().getLikedBy().removeIf((value) -> value.getId() == user.getId());
+            findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() - 1));
+            getallLikedPostByUser.removeIf((post) -> post.getId() == findPostById.get().getId());
+            user.setLikedPost(likedPostByUser);
+            userRepo.save(user);
+            postRepo.save(findPostById.get());
+        }
 
-            successResponseInJson.put("user", user);
-            successResponseInJson.put("post", findPostById.get());
+        System.out.println("user -->" + user);
 
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        successResponseInJson.put("user", userRepo.findById(user.getId()).get());
+        successResponseInJson.put("post", findPostById.get());
 
-            try {
-                return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-    responseInJSON.put("message", "ERROR OF THE POSTUPVOTE CONTROLLER");
-    return  new ResponseEntity< HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+        try {
+            return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        responseInJSON.put("message", "ERROR OF THE POSTUPVOTE CONTROLLER");
+        return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
     }
 }

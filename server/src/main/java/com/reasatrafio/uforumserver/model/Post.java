@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -42,22 +41,4 @@ public class Post {
     List<Comment> comments;
     private Date createdAt;
     private Date updatedAt;
-
-    @Override
-    public String toString() {
-        return "[{" +
-                "id:'" + id + '\'' +
-                ", postedById:" + postedById +
-                ", title:'" + title + '\'' +
-                ", url:'" + url + '\'' +
-                ", tags:" + Arrays.toString(tags) +
-                ", description:'" + description + '\'' +
-                ", removed:" + removed +
-                ", upvote:" + upvote +
-                ", downVote:" + downVote +
-                ", comments:" + comments +
-                ", createdAt:" + createdAt +
-                ", updatedAt:" + updatedAt +
-                "}]";
-    }
 }
