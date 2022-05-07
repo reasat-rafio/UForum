@@ -13,6 +13,8 @@ export const Post: React.FC<IPost> = ({
   downVote,
   upvote,
   id,
+  likedBy,
+  dislikedBy,
 }) => {
   const { user } = useUser();
 
@@ -38,7 +40,13 @@ export const Post: React.FC<IPost> = ({
         </ul>
       </div>
       <div className="w-full h-[1px] bg-slate-200" />
-      <PostCTA id={id} downVote={downVote} upvote={upvote} />
+      <PostCTA
+        id={id}
+        downVote={downVote}
+        upvote={upvote}
+        likedBy={likedBy}
+        dislikedBy={dislikedBy}
+      />
     </div>
   );
 };

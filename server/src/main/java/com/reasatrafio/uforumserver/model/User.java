@@ -19,7 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-@JsonIdentityInfo(scope=User.class, generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(scope=User.class, generator= ObjectIdGenerators.StringIdGenerator.class, property="id")
 public class User {
     @Id
     private String id;

@@ -19,14 +19,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-@JsonIdentityInfo(scope=Post.class, generator= ObjectIdGenerators.PropertyGenerator.class, property="id")
+@JsonIdentityInfo(scope=Post.class, generator= ObjectIdGenerators.StringIdGenerator.class, property="id")
 public class Post {
     @Id
     private String id;
     @DBRef
-    User postedById;
+    private User postedBy;
     @DBRef
-    List<User> likedBy;
+    private List<User> likedBy;
     @DBRef
     List<User> dislikedBy;
     private String title;
@@ -38,7 +38,22 @@ public class Post {
     private Number upvote;
     private Number downVote;
     @DBRef
-    List<Comment> comments;
+    private List<Comment> comments;
     private Date createdAt;
     private Date updatedAt;
+    private String posterId;
+
+    public Post(User postedById, String title, String[] tags, String description, Number upvote, Number downVote,Date createdAt, List<User> likedBy) {
+        this.postedBy = postedById;
+        this.title = title;
+        this.tags = tags;
+        this.description = description;
+        this.downVote = downVote;
+        this.upvote = upvote;
+        this.createdAt = createdAt;
+        this.likedBy = likedBy;
+    }
+
+
+
 }

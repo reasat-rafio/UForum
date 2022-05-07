@@ -11,8 +11,8 @@ interface IUser {
   imageUrl: string;
   likedComments?: IComment[];
   likedComments?: IComment[];
-  likedPost?: IPost[];
-  dislikedPost?: IPost[];
+  likedPost?: IPost[] | string;
+  dislikedPost?: IPost[] | string;
 }
 
 interface IPost {
@@ -28,7 +28,7 @@ interface IPost {
   updatedAt: string;
   tags?: string[];
   likedBy?: IUser[];
-  dilikedBy?: IUser[];
+  dislikedBy?: IUser[];
 }
 
 interface IComment {

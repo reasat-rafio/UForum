@@ -10,6 +10,7 @@ import { useUI } from "@contexts/ui.context";
 import axios from "axios";
 import { useUser } from "@contexts/user.conext";
 import { useRouter } from "next/router";
+import { v4 as uuid } from "uuid";
 
 interface IFormInput {
   title: string;
@@ -41,16 +42,16 @@ export const Form: React.FC<FormProps> = ({ className }) => {
     setPageLoading(true);
     try {
       const { data } = await axios.post("http://localhost:8080/post/submit", {
-        postedById: user,
         title,
         description,
         tags,
+        userId: user?.id,
       });
-      console.log(data.user);
+      console.log(data);
 
-      setUserAction(data.user);
-      router.push("/");
-      reset();
+      // setUserAction(data.user);
+      // router.push("/");
+      // reset();
     } catch (error: any) {
       console.log(error.response);
     } finally {

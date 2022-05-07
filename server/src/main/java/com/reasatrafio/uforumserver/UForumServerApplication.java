@@ -3,9 +3,6 @@ package com.reasatrafio.uforumserver;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
-import com.cloudinary.Cloudinary;
-import com.cloudinary.SingletonManager;
-import com.cloudinary.utils.ObjectUtils;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class UForumServerApplication {

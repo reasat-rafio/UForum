@@ -6,8 +6,11 @@ interface ThumpUpProps {
 }
 
 export const ThumbUp: React.FC<ThumpUpProps> = ({ className }) => {
+  const onThumbsUpAddAction = async () => {};
+
   return (
     <svg
+      // onClick={onThumbsUpAddAction}
       xmlns="http://www.w3.org/2000/svg"
       className={clsx("h-6 w-6", className)}
       fill="none"
