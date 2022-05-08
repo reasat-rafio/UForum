@@ -5,7 +5,7 @@ import React, { useState } from "react";
 interface PrimaryWrapperProps {}
 
 const menu = [
-  { name: "Questions", href: "/questions", icon: "/icons/list.svg" },
+  { name: "Questions", href: "/", icon: "/icons/list.svg" },
   { name: "Tags", href: "/tags", icon: "/icons/tag.svg" },
   { name: "Ranking", href: "/ranking", icon: "/icons/award.svg" },
 ];
@@ -24,26 +24,26 @@ const socials = [
   },
 ];
 
-const personal_navigation = [
-  {
-    name: "Your questions",
-    href: "/profile/question",
-    icon: "/icons/help-circle.svg",
-  },
-  {
-    name: "Your answers",
-    href: "/profile/answer",
-    icon: "/icons/message-circle.svg",
-  },
-  {
-    name: "Your likes & votes",
-    href: "/profile/likes-votes",
-    icon: "/icons/heart.svg",
-  },
-];
-
 export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
   const { user } = useUser();
+
+  const personal_navigation = [
+    {
+      name: "Your questions",
+      href: `/profile/${user?.id}`,
+      icon: "/icons/help-circle.svg",
+    },
+    {
+      name: "Your answers",
+      href: "/profile/answer",
+      icon: "/icons/message-circle.svg",
+    },
+    {
+      name: "Your likes & votes",
+      href: "/profile/likes-votes",
+      icon: "/icons/heart.svg",
+    },
+  ];
 
   const [showSearchBar, setShowSearchBar] = useState(false);
 

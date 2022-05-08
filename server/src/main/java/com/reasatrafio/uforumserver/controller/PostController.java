@@ -17,9 +17,12 @@ import lombok.Setter;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -28,6 +31,8 @@ import java.util.*;
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class PostController {
+    @Autowired
+    private MongoTemplate mt;
     @Autowired
     private PostRepository postRepo;
     @Autowired
@@ -43,17 +48,28 @@ public class PostController {
         }
     }
 
-    @GetMapping("/posts/{id}")
-    public ResponseEntity<?> getSinglePost(@PathVariable String id) {
+    @GetMapping("posts/{userId}")
+    public ResponseEntity<?> getSinglePost(@PathVariable String userId) {
         HashMap<String, String> responseInJSON = new HashMap<>();
-        Optional<Post> findPostById = postRepo.findById(id);
+        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
 
-        if (findPostById.isEmpty()) {
-            responseInJSON.put("message", "Post not found");
-            return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        Query query = new Query();
+        query.addCriteria(Criteria.where("postedBy").is(userId));
+        List<Post> posts =mt.find(query, Post.class);
+
+
+        successResponseInJson.put("posts", posts);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+        try {
+            return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
         }
-        return new ResponseEntity<Post>(findPostById.get(), HttpStatus.OK);
+
+        return new ResponseEntity<String>("posts", HttpStatus.OK);
     }
+
 
     @Setter
     @Getter
@@ -110,50 +126,7 @@ public class PostController {
         return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
     }
 
-//    @PostMapping("post/submit")
-//    public ResponseEntity<?> submit(@RequestBody Post post) {
-//        HashMap<String, String> responseInJSON = new HashMap<>();
-//        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
-//        Optional<User> userExist = userRepo.findById(post.getPostedById().getId());
-//        if (userExist.isPresent()) {
-//
-//            List<User> postLikedBy = new ArrayList<User>();
-//            postLikedBy.add(userExist.get());
-//
-//            // SAVE THE POST
-//            post.setUpvote(1);
-//            post.setDownVote(0);
-//            post.setRemoved(false);
-//            post.setLikedBy(postLikedBy);
-//            post.setCreatedAt(new Date(System.currentTimeMillis()));
-//            postRepo.save(post);
-//
-//            // UPDATE THE USER
-//            List<Post> allPostSubmittedByTheUser = userExist.get().getPosts();
-//            List<Post> emptyPostList = new ArrayList<>();
-//            if (allPostSubmittedByTheUser == null) {
-//                emptyPostList.add(post);
-//                userExist.get().setPosts(emptyPostList);
-//                userRepo.save(userExist.get());
-//            } else {
-//                allPostSubmittedByTheUser.add(post);
-//                userExist.get().setPosts(allPostSubmittedByTheUser);
-//                userRepo.save(userExist.get());
-//            }
-//            successResponseInJson.put("user", userExist.get());
-//            successResponseInJson.put("post", post);
-//
-//            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-//
-//            try {
-//                return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
-//            } catch (JsonProcessingException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//        responseInJSON.put("message", "User Doesn't Exist");
-//        return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
-//    }
+
 
     @PutMapping("/post/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") String id) {
