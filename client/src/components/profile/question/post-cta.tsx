@@ -29,11 +29,11 @@ export const PostCTA: React.FC<PostCTAProps> = ({
   const [userDownvoted, setUserDownvoted] = useState(false);
 
   useEffect(() => {
-    const userAlreadyUpvotedThisPost = likedBy?.some(
-      (usr) => typeof usr === "string" && usr === user?.id
+    const userAlreadyUpvotedThisPost = likedBy?.some((usr) =>
+      typeof usr === "string" ? usr === user?.id : usr.id === user?.id
     );
-    const userAlreadyDownvotedThisPost = dislikedBy?.some(
-      (usr) => typeof usr === "string" && usr === user?.id
+    const userAlreadyDownvotedThisPost = dislikedBy?.some((usr) =>
+      typeof usr === "string" ? usr === user?.id : usr.id === user?.id
     );
 
     if (userAlreadyUpvotedThisPost) {

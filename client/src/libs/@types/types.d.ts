@@ -29,6 +29,7 @@ interface IPost {
   tags?: string[];
   likedBy?: IUser[];
   dislikedBy?: IUser[];
+  postedBy: IUser;
 }
 
 interface IComment {

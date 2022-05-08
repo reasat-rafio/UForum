@@ -15,15 +15,16 @@ export const Post: React.FC<IPost> = ({
   id,
   likedBy,
   dislikedBy,
+  postedBy,
 }) => {
   const { user } = useUser();
 
   return (
     <div className="bg-white rounded p-8 space-y-5">
       <PostHeader
-        username={user?.username}
+        username={postedBy?.username}
         createdAt={createdAt}
-        profilePicture={user?.imageUrl}
+        profilePicture={postedBy?.imageUrl}
       />
       <div className="space-y-5">
         <h2 className="font-[700] text-xl">{title}</h2>

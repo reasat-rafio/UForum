@@ -49,9 +49,9 @@ export const Form: React.FC<FormProps> = ({ className }) => {
       });
       console.log(data);
 
-      // setUserAction(data.user);
-      // router.push("/");
-      // reset();
+      setUserAction(data.user);
+      router.push(`/profile/${user?.id}`);
+      reset();
     } catch (error: any) {
       console.log(error.response);
     } finally {
