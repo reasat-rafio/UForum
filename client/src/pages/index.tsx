@@ -6,6 +6,7 @@ import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { PostLoading } from "@components/ui/post-loading";
+import { Page } from "@components/common/page";
 
 interface IProps {
   posts: IPost[];
@@ -27,29 +28,31 @@ const Home: NextPage<IProps> = () => {
   }, [posts]);
 
   return (
-    <PrimaryWrapper>
-      <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
-        <motion.div className="col-span-9 mx-10 flex flex-col space-y-4">
-          {posts?.length ? (
-            posts
-              .filter(({ removed }) => !removed)
-              .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-              .map((post) => (
-                <Post
-                  key={post.id}
-                  {...post}
-                  setState={setPosts}
-                  posts={posts}
-                />
-              ))
-          ) : (
-            <PostLoading />
-          )}
-        </motion.div>
+    <Page>
+      <PrimaryWrapper>
+        <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
+          <motion.div className="col-span-9 mx-10 flex flex-col space-y-4">
+            {posts?.length ? (
+              posts
+                .filter(({ removed }) => !removed)
+                .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+                .map((post) => (
+                  <Post
+                    key={post.id}
+                    {...post}
+                    setState={setPosts}
+                    posts={posts}
+                  />
+                ))
+            ) : (
+              <PostLoading />
+            )}
+          </motion.div>
 
-        <StickyInfoComponent className="col-span-3 pr-4 md:pr-8 2xl:pr-16" />
-      </div>
-    </PrimaryWrapper>
+          <StickyInfoComponent className="col-span-3 pr-4 md:pr-8 2xl:pr-16" />
+        </div>
+      </PrimaryWrapper>
+    </Page>
   );
 };
 

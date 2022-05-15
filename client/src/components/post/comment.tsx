@@ -86,7 +86,7 @@ export const Comment: React.FC<CommentProps> = ({
         </form>
         <div className="space-y-2 pt-5">
           {comments
-            .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+            ?.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
             .map(({ id, comment, user, createdAt }) => {
               const date = new Date(createdAt);
               const myDateTime = DateTime.fromMillis(Number(date)).toRelative();

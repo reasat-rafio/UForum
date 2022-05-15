@@ -3,6 +3,7 @@ package com.reasatrafio.uforumserver.controllers;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.reasatrafio.uforumserver.models.Comment;
 import com.reasatrafio.uforumserver.models.User;
 import com.reasatrafio.uforumserver.models.Post;
@@ -15,6 +16,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -59,7 +62,7 @@ public class CommentController {
 
         if(findPostById.isPresent() && findUserById.isPresent()){
             _comment.setUser(findUserById.get());
-            _comment.setUser(findUserById.get());
+            _comment.setPost(findPostById.get());
             _comment.setComment(reqData.comment);
             _comment.setCreatedAt(new Date(System.currentTimeMillis()));
             _comment.setUpvote(1);
@@ -77,6 +80,8 @@ public class CommentController {
             findUserById.get().setComments(allCommentOfThePost);
 
             userRepo.save(findUserById.get());
+            postRepo.save(findPostById.get());
+
             Post _post =  postRepo.save(findPostById.get());
 
             return new ResponseEntity<Post>(_post, HttpStatus.OK);
@@ -84,4 +89,26 @@ public class CommentController {
 
         return new ResponseEntity<String>("ERR", HttpStatus.OK);
         }
+
+    @GetMapping("comments/{userId}")
+    public ResponseEntity<?> commentOfUsers(@PathVariable String userId) {
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
+
+        Query query = new Query();
+        query.addCriteria(Criteria.where("user").is(userId));
+        List<Comment> comments =mt.find(query, Comment.class);
+
+        successResponseInJson.put("comments", comments);
+        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+        try {
+            return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        return new ResponseEntity<String>("ERR", HttpStatus.OK);
+    }
+
     }

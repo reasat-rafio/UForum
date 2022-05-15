@@ -30,12 +30,12 @@ export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
   const personal_navigation = [
     {
       name: "Your questions",
-      href: `/profile/${user?.id}`,
+      href: `/profile/question/${user?.id}`,
       icon: "/icons/help-circle.svg",
     },
     {
       name: "Your answers",
-      href: "/profile/answer",
+      href: `/profile/answer/${user?.id}`,
       icon: "/icons/message-circle.svg",
     },
     {

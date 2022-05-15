@@ -13,7 +13,6 @@ function handleExitComplete() {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { isPageLoading } = useUI();
   return (
     <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
       <AuthContext>
