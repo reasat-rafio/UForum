@@ -24,9 +24,7 @@ const Home: NextPage<IProps> = () => {
       }
     }
     fetch();
-  }, []);
-
-  console.log(posts);
+  }, [posts]);
 
   return (
     <PrimaryWrapper>

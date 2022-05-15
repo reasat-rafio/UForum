@@ -1,7 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AnimatePresence } from "framer-motion";
-import { ManagedUIContext } from "@contexts/ui.context";
+import { ManagedUIContext, useUI } from "@contexts/ui.context";
 import { Navbar } from "@components/navbar/navbar";
 import "@fontsource/roboto";
 import AuthContext from "@contexts/user.conext";
@@ -13,6 +13,7 @@ function handleExitComplete() {
 }
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { isPageLoading } = useUI();
   return (
     <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
       <AuthContext>

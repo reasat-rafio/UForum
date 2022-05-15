@@ -77,9 +77,9 @@ public class CommentController {
             findUserById.get().setComments(allCommentOfThePost);
 
             userRepo.save(findUserById.get());
-           Post ad =  postRepo.save(findPostById.get());
+            Post _post =  postRepo.save(findPostById.get());
 
-            return new ResponseEntity<Post>(ad, HttpStatus.OK);
+            return new ResponseEntity<Post>(_post, HttpStatus.OK);
         }
 
         return new ResponseEntity<String>("ERR", HttpStatus.OK);

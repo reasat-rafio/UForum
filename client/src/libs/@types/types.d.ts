@@ -36,6 +36,7 @@ interface IComment {
   id: string;
   user: IUser;
   post: IPost;
+  comment: string;
   createdAt: string;
   updatedAt: string;
   reply?: IComment;
