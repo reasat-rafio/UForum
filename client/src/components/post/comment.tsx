@@ -3,16 +3,20 @@ import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CommentSchema } from "@libs/input-schema";
+import { useUser } from "@contexts/user.conext";
+import { useUI } from "@contexts/ui.context";
+import axios from "axios";
 
 interface CommentProps {
   comments: IComment[];
+  postID: string;
 }
 
 interface IFormInput {
   comment: string;
 }
 
-export const Comment: React.FC<CommentProps> = ({ comments }) => {
+export const Comment: React.FC<CommentProps> = ({ comments, postID }) => {
   const {
     register,
     handleSubmit,
@@ -22,8 +26,25 @@ export const Comment: React.FC<CommentProps> = ({ comments }) => {
     resolver: yupResolver(CommentSchema),
   });
 
+  const { user } = useUser();
+  const { setPageLoading } = useUI();
+
   async function onSubmit({ comment }: IFormInput) {
-    reset();
+    setPageLoading(true);
+    try {
+      const data = await axios.post(`http://localhost:8080/comment/create`, {
+        comment,
+        postID,
+        userID: user?.id,
+      });
+      console.log(data);
+
+      reset();
+    } catch (error: any) {
+      console.log(error.response);
+    } finally {
+      setPageLoading(false);
+    }
   }
 
   return (

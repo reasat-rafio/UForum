@@ -67,7 +67,7 @@ export const Post: React.FC<IProps> = ({
         />
       </div>
       <AnimatePresence exitBeforeEnter>
-        {showComment && <Comment comments={comments} />}
+        {showComment && <Comment postID={id} comments={comments} />}
       </AnimatePresence>
     </motion.div>
   );
