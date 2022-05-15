@@ -68,41 +68,44 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
           <span className="text-[#808080] text-[10px]">{myDateTime}</span>
         </div>
       </div>
-      <div className="relative">
-        <Menu>
-          <Menu.Button className="p-2 hover:bg-gray-200 transition-all duration-200 rounded-full">
-            <Option />
-          </Menu.Button>
-          <Transition
-            enter="transition duration-100 ease-out"
-            enterFrom="transform scale-95 opacity-0"
-            enterTo="transform scale-100 opacity-100"
-            leave="transition duration-75 ease-out"
-            leaveFrom="transform scale-100 opacity-100"
-            leaveTo="transform scale-95 opacity-0"
-          >
-            <Menu.Items className="flex flex-col absolute -left-10 bg-gray-400 p-2 rounded w-36">
-              {menuItems.map(({ action, icon, label }) => (
-                <Menu.Item key={label}>
-                  {({}) => (
-                    <li
-                      onClick={action}
-                      className={clsx(
-                        "flex items-center space-x-4 py-2 p-3 hover:bg-secondary rounded cursor-pointer"
-                      )}
-                    >
-                      {icon}
-                      <p className="flex justify-center items-center">
-                        {label}
-                      </p>
-                    </li>
-                  )}
-                </Menu.Item>
-              ))}
-            </Menu.Items>
-          </Transition>
-        </Menu>
-      </div>
+
+      {router.pathname !== "/" && (
+        <div className="relative">
+          <Menu>
+            <Menu.Button className="p-2 hover:bg-gray-200 transition-all duration-200 rounded-full">
+              <Option />
+            </Menu.Button>
+            <Transition
+              enter="transition duration-100 ease-out"
+              enterFrom="transform scale-95 opacity-0"
+              enterTo="transform scale-100 opacity-100"
+              leave="transition duration-75 ease-out"
+              leaveFrom="transform scale-100 opacity-100"
+              leaveTo="transform scale-95 opacity-0"
+            >
+              <Menu.Items className="flex flex-col absolute -left-10 bg-gray-400 p-2 rounded w-36">
+                {menuItems.map(({ action, icon, label }) => (
+                  <Menu.Item key={label}>
+                    {({}) => (
+                      <li
+                        onClick={action}
+                        className={clsx(
+                          "flex items-center space-x-4 py-2 p-3 hover:bg-secondary rounded cursor-pointer"
+                        )}
+                      >
+                        {icon}
+                        <p className="flex justify-center items-center">
+                          {label}
+                        </p>
+                      </li>
+                    )}
+                  </Menu.Item>
+                ))}
+              </Menu.Items>
+            </Transition>
+          </Menu>
+        </div>
+      )}
     </div>
   );
 };

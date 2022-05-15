@@ -79,7 +79,8 @@ export const Form: React.FC<FormProps> = ({
             tags,
           }
         );
-        console.log(res);
+
+        router.push(`/profile/${user?.id}`);
       }
     } catch (error: any) {
       console.log(error.response);

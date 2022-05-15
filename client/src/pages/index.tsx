@@ -5,6 +5,7 @@ import axios from "axios";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { PostLoading } from "@components/ui/post-loading";
 
 interface IProps {
   posts: IPost[];
@@ -44,7 +45,7 @@ const Home: NextPage<IProps> = () => {
                 />
               ))
           ) : (
-            <div>No post Found</div>
+            <PostLoading />
           )}
         </motion.div>
 
