@@ -6,6 +6,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
 import { ThumbsDownSolid } from "@components/icons/thumb-down-solid";
 import { ThumbUpSolid } from "@components/icons/thumb-up-solid";
+import { CommentIcon } from "@components/icons/comment";
 
 interface PostCTAProps {
   downVote: number;
@@ -14,7 +15,9 @@ interface PostCTAProps {
   likedBy: IPost["likedBy"];
   dislikedBy: IPost["dislikedBy"];
   setState: Dispatch<SetStateAction<IPost[] | undefined>>;
+  setShowComment: Dispatch<SetStateAction<boolean>>;
   posts?: IPost[];
+  commentLength: number;
 }
 
 export const PostCTA: React.FC<PostCTAProps> = ({
@@ -25,6 +28,8 @@ export const PostCTA: React.FC<PostCTAProps> = ({
   dislikedBy,
   posts,
   setState,
+  setShowComment,
+  commentLength,
 }) => {
   const { user, setUserAction } = useUser();
   const { isPageLoading, setPageLoading } = useUI();
@@ -84,7 +89,7 @@ export const PostCTA: React.FC<PostCTAProps> = ({
   };
 
   return (
-    <div className="flex">
+    <div className="flex items-center">
       <div className="flex flex-1 space-x-3">
         <button
           disabled={isPageLoading}
@@ -108,7 +113,16 @@ export const PostCTA: React.FC<PostCTAProps> = ({
           <span>{downVote}</span>
         </button>
       </div>
-      <div>some</div>
+      <div className="flex items-center">
+        <span className="text-sm">{commentLength}</span>
+
+        <span
+          onClick={() => setShowComment((prev) => !prev)}
+          className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200 cursor-pointer"
+        >
+          <CommentIcon />
+        </span>
+      </div>
     </div>
   );
 };

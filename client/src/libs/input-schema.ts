@@ -26,3 +26,7 @@ export const PostSchema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
 });
+
+export const CommentSchema = yup.object().shape({
+  comment: yup.string().required(),
+});
