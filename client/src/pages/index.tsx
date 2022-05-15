@@ -1,3 +1,4 @@
+import { StickyInfoComponent } from "@components/home/sticky-info-component";
 import { Post } from "@components/profile/question/post";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import axios from "axios";
@@ -8,16 +9,8 @@ interface IProps {
   posts: IPost[];
 }
 
-// export const getStaticProps: GetStaticProps = async () => {
-//   const { data } = await axios(`http://localhost:8080/posts`);
-
-//   return {
-//     props: { posts: data ? data : false }, // will be passed to the page component as props
-//   };
-// };
-
 const Home: NextPage<IProps> = () => {
-  const [posts, setPosts] = useState<IPost[]>([]);
+  const [posts, setPosts] = useState<IPost[] | undefined>([]);
 
   useEffect(() => {
     async function fetch() {
@@ -31,25 +24,30 @@ const Home: NextPage<IProps> = () => {
     fetch();
   }, []);
 
+  console.log(posts);
+
   return (
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
         <div className="col-span-9 mx-10 flex flex-col space-y-4">
           {posts?.length ? (
             posts
+              .filter(({ removed }) => !removed)
               .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
-              .map((post) => <Post key={post.id} {...post} />)
+              .map((post) => (
+                <Post
+                  key={post.id}
+                  {...post}
+                  setState={setPosts}
+                  posts={posts}
+                />
+              ))
           ) : (
             <div>No post Found</div>
           )}
         </div>
 
-        <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-          laboriosam vero ipsum consequatur deleniti architecto a officia
-          distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-          earum. Assumenda, sit. Dolore.
-        </div>
+        <StickyInfoComponent className="col-span-3 pr-4 md:pr-8 2xl:pr-16" />
       </div>
     </PrimaryWrapper>
   );

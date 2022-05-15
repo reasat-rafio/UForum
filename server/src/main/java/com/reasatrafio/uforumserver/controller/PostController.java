@@ -126,9 +126,7 @@ public class PostController {
         return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
     }
 
-
-
-    @PutMapping("/post/delete/{id}")
+    @PostMapping("/post/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable("id") String id) {
         HashMap<String, String> responseInJSON = new HashMap<>();
         Optional<Post> findPostById = postRepo.findById(id);
@@ -163,6 +161,7 @@ public class PostController {
 
         String userId =  reqData.getUserId();
         boolean userUpvoted = reqData.isUserUpvoted();
+
         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
         HashMap<String, String> responseInJSON = new HashMap<>();
         Optional<Post> findPostById = postRepo.findById(id);
@@ -178,10 +177,10 @@ public class PostController {
             @REASON: if the user never liked anything then user.getLikedPost().size() will return null
         */
         List<Post> userLikedPostList = new ArrayList<>();
-        if (user.getLikedPost().size() < 1) {
-            userLikedPostList.add(findPostById.get());
-        } else {
+        if (user.getLikedPost() != null && user.getLikedPost().size() > 0) {
             userLikedPostList = user.getLikedPost();
+        } else {
+            userLikedPostList.add(findPostById.get());
         }
 
         // GET ALL THE LIKED POST BY USER

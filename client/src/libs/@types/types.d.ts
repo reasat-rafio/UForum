@@ -20,7 +20,7 @@ interface IPost {
   title: string;
   url: string;
   description: string;
-  remove?: boolean;
+  removed?: boolean;
   upvote: number;
   downVote: number;
   comments: IComment[];

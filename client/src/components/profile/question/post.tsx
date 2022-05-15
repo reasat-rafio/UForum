@@ -1,11 +1,13 @@
-import { ThumbDown } from "@components/icons/thumb-down";
-import { ThumbUp } from "@components/icons/thumb-up";
-import { useUser } from "@contexts/user.conext";
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { PostCTA } from "./post-cta";
 import { PostHeader } from "./post-header";
 
-export const Post: React.FC<IPost> = ({
+interface IProps extends IPost {
+  setState: Dispatch<SetStateAction<IPost[] | undefined>>;
+  posts?: IPost[];
+}
+
+export const Post: React.FC<IProps> = ({
   createdAt,
   title,
   description,
@@ -16,12 +18,14 @@ export const Post: React.FC<IPost> = ({
   likedBy,
   dislikedBy,
   postedBy,
+  setState,
+  posts,
 }) => {
-  const { user } = useUser();
-
   return (
     <div className="bg-white rounded p-8 space-y-5">
       <PostHeader
+        id={id}
+        setState={setState}
         username={postedBy?.username}
         createdAt={createdAt}
         profilePicture={postedBy?.imageUrl}
@@ -42,11 +46,13 @@ export const Post: React.FC<IPost> = ({
       </div>
       <div className="w-full h-[1px] bg-slate-200" />
       <PostCTA
+        setState={setState}
         id={id}
         downVote={downVote}
         upvote={upvote}
         likedBy={likedBy}
         dislikedBy={dislikedBy}
+        posts={posts}
       />
     </div>
   );

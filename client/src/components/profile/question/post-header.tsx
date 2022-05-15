@@ -1,36 +1,53 @@
 import { Delete } from "@components/icons/delete";
 import { Edit } from "@components/icons/edit";
 import { Option } from "@components/icons/option";
+import { useUI } from "@contexts/ui.context";
 import { Menu, Transition } from "@headlessui/react";
+import axios from "axios";
 import clsx from "clsx";
 import { DateTime } from "luxon";
-import React from "react";
+import React, { SetStateAction } from "react";
+import { Dispatch } from "react";
 
 interface PostHeaderProps {
   createdAt: string;
   username: string | undefined;
   profilePicture: string | undefined;
+  id: string;
+  setState: Dispatch<SetStateAction<IPost[] | undefined>>;
 }
 
 export const PostHeader: React.FC<PostHeaderProps> = ({
   createdAt,
   username,
   profilePicture,
+  id,
+  setState,
 }) => {
-  console.log(profilePicture);
+  const { setPageLoading } = useUI();
 
   const date = new Date(+createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED
   );
 
-  const onDeleteAction = () => {};
+  const onDeleteAction = async () => {
+    setPageLoading(true);
+    try {
+      await axios.post(`http://localhost:8080/post/delete/${id}`);
+      setState((prev) => prev?.filter((post) => post.id !== id));
+    } catch (error: any) {
+      console.log(error.response);
+    } finally {
+      setPageLoading(false);
+    }
+  };
 
   const onEditAction = () => {};
 
   const menuItems = [
-    { label: "edit", icon: <Delete />, action: onDeleteAction },
-    { label: "delete", icon: <Edit />, action: onEditAction },
+    { label: "edit", icon: <Delete />, action: onEditAction },
+    { label: "delete", icon: <Edit />, action: onDeleteAction },
   ];
 
   return (
@@ -59,10 +76,10 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
             leaveFrom="transform scale-100 opacity-100"
             leaveTo="transform scale-95 opacity-0"
           >
-            <Menu.Items className="flex flex-col absolute left-0 bg-gray-400 p-2 rounded w-36">
+            <Menu.Items className="flex flex-col absolute -left-10 bg-gray-400 p-2 rounded w-36">
               {menuItems.map(({ action, icon, label }) => (
                 <Menu.Item key={label}>
-                  {({ active }) => (
+                  {({}) => (
                     <li
                       onClick={action}
                       className={clsx(
@@ -77,26 +94,6 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
                   )}
                 </Menu.Item>
               ))}
-              {/* <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`${active && "bg-blue-500"}`}
-                    href="/account-settings"
-                  >
-                    Account settings
-                  </a>
-                )}
-              </Menu.Item>
-              <Menu.Item>
-                {({ active }) => (
-                  <a
-                    className={`${active && "bg-blue-500"}`}
-                    href="/account-settings"
-                  >
-                    Documentation
-                  </a>
-                )}
-              </Menu.Item> */}
             </Menu.Items>
           </Transition>
         </Menu>
