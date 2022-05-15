@@ -2,7 +2,6 @@ import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 import axios from "axios";
-import { useUser } from "@contexts/user.conext";
 import { Post } from "@components/profile/question/post";
 
 interface IProps {
@@ -30,8 +29,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const Question: NextPage<IProps> = ({ data: { posts } }) => {
-  const { user } = useUser();
-
   return (
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">

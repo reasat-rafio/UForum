@@ -2,7 +2,7 @@ import Button from "@components/ui/button";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { PostSchema } from "@libs/input-schema";
 import clsx from "clsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import ReactTagInput from "@pathofdev/react-tag-input";
 import "@pathofdev/react-tag-input/build/index.css";
@@ -12,16 +12,22 @@ import { useUser } from "@contexts/user.conext";
 import { useRouter } from "next/router";
 import { v4 as uuid } from "uuid";
 
-interface IFormInput {
+export interface IFormInput {
   title: string;
   description: string;
 }
 
 interface FormProps {
   className?: string;
+  data?: IPost;
+  actonType?: "post" | "edit";
 }
 
-export const Form: React.FC<FormProps> = ({ className }) => {
+export const Form: React.FC<FormProps> = ({
+  className,
+  data,
+  actonType = "post",
+}) => {
   const {
     register,
     handleSubmit,
@@ -29,6 +35,10 @@ export const Form: React.FC<FormProps> = ({ className }) => {
     reset,
   } = useForm<IFormInput>({
     mode: "onChange",
+    defaultValues: {
+      description: data?.description && data.description,
+      title: data?.title && data.title,
+    },
     resolver: yupResolver(PostSchema),
   });
 
@@ -38,20 +48,39 @@ export const Form: React.FC<FormProps> = ({ className }) => {
   const { user, setUserAction } = useUser();
   const [tags, setTags] = React.useState<string[]>([]);
 
+  useEffect(() => {
+    if (data?.tags) {
+      setTags(data.tags);
+    }
+  }, [data]);
+
   async function onSubmit({ title, description }: IFormInput) {
     setPageLoading(true);
     try {
-      const { data } = await axios.post("http://localhost:8080/post/submit", {
-        title,
-        description,
-        tags,
-        userId: user?.id,
-      });
-      console.log(data);
+      if (actonType === "post") {
+        const { data } = await axios.post("http://localhost:8080/post/submit", {
+          title,
+          description,
+          tags,
+          userId: user?.id,
+        });
 
-      setUserAction(data.user);
-      router.push(`/profile/${user?.id}`);
-      reset();
+        setUserAction(data.user);
+        router.push(`/profile/${user?.id}`);
+        reset();
+      }
+
+      if (actonType === "edit") {
+        const res = await axios.post(
+          `http://localhost:8080/post/edit/${data?.id}`,
+          {
+            title,
+            description,
+            tags,
+          }
+        );
+        console.log(res);
+      }
     } catch (error: any) {
       console.log(error.response);
     } finally {

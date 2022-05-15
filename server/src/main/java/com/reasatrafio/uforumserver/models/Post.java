@@ -1,4 +1,4 @@
-package com.reasatrafio.uforumserver.model;
+package com.reasatrafio.uforumserver.models;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

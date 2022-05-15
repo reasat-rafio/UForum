@@ -1,22 +1,18 @@
-package com.reasatrafio.uforumserver.controller;
+package com.reasatrafio.uforumserver.controllers;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
-import com.reasatrafio.uforumserver.model.Post;
-import com.reasatrafio.uforumserver.model.User;
+import com.reasatrafio.uforumserver.models.Post;
+import com.reasatrafio.uforumserver.models.User;
 import com.reasatrafio.uforumserver.repository.PostRepository;
 import com.reasatrafio.uforumserver.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.HttpStatus;
@@ -24,7 +20,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
-import java.io.DataInput;
 import java.io.IOException;
 import java.util.*;
 
@@ -48,7 +43,29 @@ public class PostController {
         }
     }
 
-    @GetMapping("posts/{userId}")
+
+    @GetMapping("post/{postID}")
+    public ResponseEntity<?> getOnePostByID(@PathVariable String postID) {
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
+
+        Optional<Post> pst = postRepo.findById(postID);
+
+        if(pst.isPresent()){
+            successResponseInJson.put("post", pst.get());
+            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
+
+            try {
+                return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return new ResponseEntity<String>("posts", HttpStatus.OK);
+    }
+
+        @GetMapping("posts/{userId}")
     public ResponseEntity<?> getSinglePost(@PathVariable String userId) {
         HashMap<String, String> responseInJSON = new HashMap<>();
         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
@@ -140,6 +157,39 @@ public class PostController {
         postToDelete.setRemoved(true);
         postRepo.save(postToDelete);
         return new ResponseEntity<Post>(postToDelete, HttpStatus.OK);
+    }
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class EditReqBody {
+        String title ;
+        String description ;
+        String[] tags;
+    }
+
+    @PostMapping("/post/edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable("id") String id, @RequestBody String data) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        EditReqBody reqData = mapper.readValue(data.toString(), EditReqBody.class);
+
+        System.out.println(reqData.toString());
+
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Optional<Post> findPostById = postRepo.findById(id);
+
+        if(findPostById.isPresent()){
+            findPostById.get().setTitle(reqData.getTitle());
+            findPostById.get().setDescription(reqData.getDescription());
+            findPostById.get().setTags(reqData.getTags());
+        } else {
+            responseInJSON.put("message", "Post not found");
+            return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+        }
+        postRepo.save(findPostById.get());
+        return new ResponseEntity<Post>(findPostById.get(), HttpStatus.OK);
     }
 
 

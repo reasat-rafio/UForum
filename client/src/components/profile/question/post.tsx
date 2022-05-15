@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { PostCTA } from "./post-cta";
 import { PostHeader } from "./post-header";
+import { motion } from "framer-motion";
 
 interface IProps extends IPost {
   setState: Dispatch<SetStateAction<IPost[] | undefined>>;
@@ -22,7 +23,11 @@ export const Post: React.FC<IProps> = ({
   posts,
 }) => {
   return (
-    <div className="bg-white rounded p-8 space-y-5">
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className="bg-white rounded p-8 space-y-5"
+    >
       <PostHeader
         id={id}
         setState={setState}
@@ -54,6 +59,6 @@ export const Post: React.FC<IProps> = ({
         dislikedBy={dislikedBy}
         posts={posts}
       />
-    </div>
+    </motion.div>
   );
 };

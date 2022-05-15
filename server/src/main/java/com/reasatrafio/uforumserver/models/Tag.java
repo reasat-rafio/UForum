@@ -1,10 +1,11 @@
-package com.reasatrafio.uforumserver.model;
+package com.reasatrafio.uforumserver.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,22 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document
-public class Comment {
+public class Tag {
     @Id
     private String id;
+    @Indexed(unique = true)
+    private String title;
     @DBRef
-    User user;
+    List<Post> posts;
     @DBRef
-    Post post;
-    String comment;
-    private Number upvote;
-    private Number downVote;
-    @DBRef
-    Comment reply;
-    @DBRef
-    List<User> likedBy;
-    @DBRef
-    List<User> dislikedBy;
+    List<User> followedBy;
     private Date createdAt;
     private Date updatedAt;
 }

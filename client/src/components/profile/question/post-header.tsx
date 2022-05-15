@@ -6,6 +6,7 @@ import { Menu, Transition } from "@headlessui/react";
 import axios from "axios";
 import clsx from "clsx";
 import { DateTime } from "luxon";
+import { useRouter } from "next/router";
 import React, { SetStateAction } from "react";
 import { Dispatch } from "react";
 
@@ -26,6 +27,8 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
 }) => {
   const { setPageLoading } = useUI();
 
+  const router = useRouter();
+
   const date = new Date(+createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED
@@ -43,7 +46,9 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
     }
   };
 
-  const onEditAction = () => {};
+  const onEditAction = () => {
+    router.replace(`/post/edit/${id}`);
+  };
 
   const menuItems = [
     { label: "edit", icon: <Delete />, action: onEditAction },

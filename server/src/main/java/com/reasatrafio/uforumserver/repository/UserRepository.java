@@ -1,6 +1,6 @@
 package com.reasatrafio.uforumserver.repository;
 
-import com.reasatrafio.uforumserver.model.User;
+import com.reasatrafio.uforumserver.models.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

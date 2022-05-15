@@ -1,8 +1,8 @@
-package com.reasatrafio.uforumserver.controller;
+package com.reasatrafio.uforumserver.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.reasatrafio.uforumserver.model.User;
+import com.reasatrafio.uforumserver.models.User;
 import com.reasatrafio.uforumserver.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;

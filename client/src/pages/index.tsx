@@ -2,8 +2,9 @@ import { StickyInfoComponent } from "@components/home/sticky-info-component";
 import { Post } from "@components/profile/question/post";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import axios from "axios";
-import type { GetStaticProps, NextPage } from "next";
+import type { NextPage } from "next";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 interface IProps {
   posts: IPost[];
@@ -29,7 +30,7 @@ const Home: NextPage<IProps> = () => {
   return (
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
-        <div className="col-span-9 mx-10 flex flex-col space-y-4">
+        <motion.div className="col-span-9 mx-10 flex flex-col space-y-4">
           {posts?.length ? (
             posts
               .filter(({ removed }) => !removed)
@@ -45,7 +46,7 @@ const Home: NextPage<IProps> = () => {
           ) : (
             <div>No post Found</div>
           )}
-        </div>
+        </motion.div>
 
         <StickyInfoComponent className="col-span-3 pr-4 md:pr-8 2xl:pr-16" />
       </div>
