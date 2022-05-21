@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import clsx from "clsx";
 import { DateTime } from "luxon";
 import { BiUpvote, BiDownvote } from "react-icons/bi";
@@ -11,15 +11,17 @@ interface BodyProps {
   post: IPost;
 }
 
-export const Body: React.FC<BodyProps> = ({
-  className,
-  post: { id, title, createdAt, description, comments, postedBy },
-}) => {
-  const date = new Date(+createdAt / 1000);
+export const Body: React.FC<BodyProps> = ({ className, post }) => {
+  const [_post, setPost] = useState(post);
+
+  const date = new Date(+_post.createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED
   );
 
+  console.log("====================================");
+  console.log(_post.comments);
+  console.log("====================================");
   return (
     <div
       className={clsx(
@@ -28,15 +30,15 @@ export const Body: React.FC<BodyProps> = ({
       )}
     >
       <div>
-        <h1 className="text-3xl font-semibold font-mono">{title}</h1>
+        <h1 className="text-3xl font-semibold font-mono">{_post.title}</h1>
         <div className="text-sm">Asked {myDateTime}</div>
       </div>
       <Description
-        description={description}
+        description={_post.description}
         myDateTime={myDateTime}
-        postedBy={postedBy}
+        postedBy={_post.postedBy}
       />
-      <Bottom comments={comments} />
+      <Bottom postID={_post.id} comments={_post.comments} setPost={setPost} />
     </div>
   );
 };

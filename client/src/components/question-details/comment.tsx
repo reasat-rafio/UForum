@@ -5,8 +5,6 @@ import { BiDownvote, BiUpvote } from "react-icons/bi";
 interface CommentProps {}
 
 export const Comment: React.FC<IComment> = ({ comment, user }) => {
-  console.log(user);
-
   const date = new Date(+user.createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED

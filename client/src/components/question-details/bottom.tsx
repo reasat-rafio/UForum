@@ -1,19 +1,27 @@
 import { useUI } from "@contexts/ui.context";
+import { useUser } from "@contexts/user.conext";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CommentSchema } from "@libs/input-schema";
-import React from "react";
+import axios from "axios";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Comment } from "./comment";
 
 interface BottomProps {
+  postID: string;
   comments: IComment[];
+  setPost: Dispatch<SetStateAction<IPost>>;
 }
 
 interface IFormInput {
   comment: string;
 }
 
-export const Bottom: React.FC<BottomProps> = ({ comments }) => {
+export const Bottom: React.FC<BottomProps> = ({
+  comments,
+  postID,
+  setPost,
+}) => {
   const {
     register,
     handleSubmit,
@@ -24,11 +32,26 @@ export const Bottom: React.FC<BottomProps> = ({ comments }) => {
   });
 
   const { setPageLoading } = useUI();
+  const { user } = useUser();
 
   async function onSubmit({ comment }: IFormInput) {
-    setPageLoading(true);
+    // setPageLoading(true);
     try {
-    } catch (err) {}
+      const { data } = await axios.post(
+        `http://localhost:8080/comment/create`,
+        {
+          comment,
+          postID,
+          userID: user?.id,
+        }
+      );
+      setPost((prev) => ({ ...prev, comments: data.comment }));
+      reset();
+    } catch (err) {
+      console.log("errr");
+    } finally {
+      //   setPageLoading(false);
+    }
   }
 
   return (
@@ -57,9 +80,11 @@ export const Bottom: React.FC<BottomProps> = ({ comments }) => {
         )}
       </div>
       <div className="flex flex-col divide-y divide-[#808080]/30">
-        {comments?.map((comment) => (
-          <Comment key={comment.id} {...comment} />
-        ))}
+        {comments
+          ?.sort((a, b) => (a.createdAt > b.createdAt ? -1 : 1))
+          .map((comment: IComment) => (
+            <Comment key={comment.id} {...comment} />
+          ))}
       </div>
     </div>
   );
