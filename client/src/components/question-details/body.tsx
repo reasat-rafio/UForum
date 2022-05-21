@@ -27,8 +27,8 @@ export const Body: React.FC<BodyProps> = ({ className, post }) => {
       )}
     >
       <div>
-        <h1 className="text-3xl font-semibold ">{_post.title}</h1>
-        <div className="text-sm flex space-x-4">
+        <h1 className="text-3xl font-medium ">{_post.title}</h1>
+        <div className="text-sm flex space-x-4 my-2">
           <span>
             Asked Time <span className="text-secondary">{myDateTime}</span>
           </span>

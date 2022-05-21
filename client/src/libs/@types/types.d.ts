@@ -46,6 +46,7 @@ interface IComment {
   downVote: number;
   likedBy?: IPost[];
   dislikedBy?: IPost[];
+  postID?: string;
 }
 
 interface ITag {

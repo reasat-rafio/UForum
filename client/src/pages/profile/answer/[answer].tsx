@@ -50,9 +50,9 @@ const Answer: NextPage<IProps> = ({ data: { comments } }) => {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    router.push(`/question/${comment.post}`);
+                    router.push(`/question/${comment.postID}`);
                   }}
-                  key={`${comment.post?.id}-${comment.id}`}
+                  key={`${comment.postID}-${comment.id}`}
                 >
                   <div
                     className="border-l-4 p-4 rounded bg-white border-secondary flex space-x-2np"

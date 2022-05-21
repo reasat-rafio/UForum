@@ -85,38 +85,44 @@ export default function Search() {
             </div>
             {searchText && (
               <div className="bg-white flex flex-col rounded-md overflow-hidden h-full max-h-64vh lg:max-h-[550px] shadow-lg divide-y">
-                {allPosts?.map(({ id, title, description, postedBy, tags }) => (
-                  <div
-                    className="px-5 py-3 cursor-pointer hover:bg-gray-200 flex space-x-2"
-                    key={id}
-                    onClick={() => {
-                      router.push(`/question/${id}`);
-                      setDisplaySearch(false);
-                    }}
-                  >
-                    <div>
-                      <img className="h-8 w-8" src={postedBy.imageUrl} alt="" />
+                {allPosts
+                  ?.slice(0, 5)
+                  .map(({ id, title, description, postedBy, tags }) => (
+                    <div
+                      className="px-5 py-3 cursor-pointer hover:bg-gray-200 flex space-x-2"
+                      key={id}
+                      onClick={() => {
+                        router.push(`/question/${id}`);
+                        setDisplaySearch(false);
+                      }}
+                    >
+                      <div>
+                        <img
+                          className="h-8 w-8"
+                          src={postedBy.imageUrl}
+                          alt=""
+                        />
+                      </div>
+                      <div className="flex flex-col space-y-1">
+                        <h4 className="font-medium text-[15px] flex-1">
+                          {title}
+                        </h4>
+                        <p className="text-sm text-gray-primary">
+                          {truncate(description, 180)}
+                        </p>
+                        <ul className="flex space-x-2">
+                          {tags?.map((tag) => (
+                            <div
+                              className="bg-secondary bg-opacity-10 p-2 rounded text-xs"
+                              key={tag}
+                            >
+                              <li>{tag}</li>{" "}
+                            </div>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                    <div className="flex flex-col space-y-1">
-                      <h4 className="font-medium text-[15px] flex-1">
-                        {title}
-                      </h4>
-                      <p className="text-sm text-gray-primary">
-                        {truncate(description, 80)}
-                      </p>
-                      <ul className="flex space-x-2">
-                        {tags?.map((tag) => (
-                          <div
-                            className="bg-secondary bg-opacity-10 p-2 rounded text-xs"
-                            key={tag}
-                          >
-                            <li>{tag}</li>{" "}
-                          </div>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             )}
           </div>
