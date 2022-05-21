@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import { useUI } from "@contexts/ui.context";
 import {
   disableBodyScroll,
@@ -7,16 +7,35 @@ import {
 } from "body-scroll-lock";
 import SearchBox from "./search-box";
 import clsx from "clsx";
+import { usePost } from "@contexts/post.context";
+import { truncate } from "@libs/helpers";
+import { useRouter } from "next/router";
 
 export default function Search() {
+  const router = useRouter();
+
   const { displaySearch, setDisplaySearch } = useUI();
+  const { posts } = usePost();
   const [searchText, setSearchText] = React.useState("");
+
+  const [allPosts, setAllPosts] = useState<IPost[]>(posts as IPost[]);
 
   function handleSearch(e: React.SyntheticEvent) {
     e.preventDefault();
   }
+
+  const seachFilterAction = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // setSearchResult(filteredItems);
+  };
+
   function handleAutoSearch(e: React.FormEvent<HTMLInputElement>) {
     setSearchText(e.currentTarget.value);
+    const filteredItems = posts
+      ?.filter((pst) =>
+        pst.title.toLowerCase().includes(e.currentTarget.value.toLowerCase())
+      )
+      .slice(0, 10);
+    setAllPosts(filteredItems as IPost[]);
   }
   function clear() {
     setSearchText("");
@@ -65,15 +84,39 @@ export default function Search() {
               />
             </div>
             {searchText && (
-              <div className="bg-white flex flex-col rounded-md overflow-hidden h-full max-h-64vh lg:max-h-[550px] shadow-lg p-5">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi
-                est earum cum, non architecto hic, accusantium animi repellat
-                temporibus suscipit aliquam eligendi consequuntur accusamus
-                sunt! Natus laboriosam iure distinctio? Autem voluptas animi
-                necessitatibus molestiae. At quibusdam architecto quod dolores
-                veritatis porro officia eius consequuntur ipsam, saepe adipisci
-                ut dicta reiciendis voluptatum nostrum aliquid sint delectus,
-                nam non, accusamus earum? Voluptatem aperiam rerum tenetur
+              <div className="bg-white flex flex-col rounded-md overflow-hidden h-full max-h-64vh lg:max-h-[550px] shadow-lg divide-y">
+                {allPosts?.map(({ id, title, description, postedBy, tags }) => (
+                  <div
+                    className="px-5 py-3 cursor-pointer hover:bg-gray-200 flex space-x-2"
+                    key={id}
+                    onClick={() => {
+                      router.push(`/question/${id}`);
+                      setDisplaySearch(false);
+                    }}
+                  >
+                    <div>
+                      <img className="h-8 w-8" src={postedBy.imageUrl} alt="" />
+                    </div>
+                    <div className="flex flex-col space-y-1">
+                      <h4 className="font-medium text-[15px] flex-1">
+                        {title}
+                      </h4>
+                      <p className="text-sm text-gray-primary">
+                        {truncate(description, 80)}
+                      </p>
+                      <ul className="flex space-x-2">
+                        {tags?.map((tag) => (
+                          <div
+                            className="bg-secondary bg-opacity-10 p-2 rounded text-xs"
+                            key={tag}
+                          >
+                            <li>{tag}</li>{" "}
+                          </div>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </div>

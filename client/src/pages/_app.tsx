@@ -6,6 +6,7 @@ import { Navbar } from "@components/navbar/navbar";
 import "@fontsource/roboto";
 import AuthContext from "@contexts/user.conext";
 import Search from "@components/common/search";
+import PostsContext from "@contexts/post.context";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {
@@ -17,11 +18,13 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
       <AuthContext>
-        <ManagedUIContext>
-          <Navbar />
-          <Search />
-          <Component {...pageProps} />
-        </ManagedUIContext>
+        <PostsContext>
+          <ManagedUIContext>
+            <Navbar />
+            <Search />
+            <Component {...pageProps} />
+          </ManagedUIContext>
+        </PostsContext>
       </AuthContext>
     </AnimatePresence>
   );

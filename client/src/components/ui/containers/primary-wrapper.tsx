@@ -1,7 +1,9 @@
+import { usePost } from "@contexts/post.context";
 import { useUI } from "@contexts/ui.context";
 import { useUser } from "@contexts/user.conext";
+import axios from "axios";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface PrimaryWrapperProps {}
 
@@ -27,6 +29,7 @@ const socials = [
 
 export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
   const { user } = useUser();
+  const { setPostsAction } = usePost();
   const { setDisplaySearch } = useUI();
 
   const personal_navigation = [
@@ -46,6 +49,18 @@ export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
       icon: "/icons/heart.svg",
     },
   ];
+
+  useEffect(() => {
+    async function fetch() {
+      try {
+        const { data } = await axios(`http://localhost:8080/posts`);
+        setPostsAction(data);
+      } catch (error: any) {
+        console.log(error.response);
+      }
+    }
+    fetch();
+  }, []);
 
   return (
     <section className="grid grid-cols-12 max-w-[1920px] relative">
