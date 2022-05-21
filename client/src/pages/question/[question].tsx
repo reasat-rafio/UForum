@@ -36,7 +36,7 @@ const Question: NextPage<IProps> = ({ data: { post } }) => {
       <PrimaryWrapper>
         <div className="min-h-screen bg-light-gray grid grid-cols-12 pt-32">
           <Body
-            className="col-span-9 mx-10 flex flex-col space-y-4"
+            className="col-span-9 mx-10 flex flex-col space-y-4 bg-white p-5 rounded"
             post={post}
           />
 

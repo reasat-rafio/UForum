@@ -7,6 +7,7 @@ import axios from "axios";
 import { ThumbsDownSolid } from "@components/icons/thumb-down-solid";
 import { ThumbUpSolid } from "@components/icons/thumb-up-solid";
 import { CommentIcon } from "@components/icons/comment";
+import { BiDownvote, BiUpvote } from "react-icons/bi";
 
 interface PostCTAProps {
   downVote: number;
@@ -90,27 +91,21 @@ export const PostCTA: React.FC<PostCTAProps> = ({
 
   return (
     <div className="flex items-center">
-      <div className="flex flex-1 space-x-3">
+      <div className="flex flex-1 space-x-3 items-center text-sm">
         <button
           disabled={isPageLoading}
           onClick={onUpvoteAction}
           className="flex space-x-1 items-center"
         >
           <span className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200 cursor-pointer">
-            {userUpvoted ? <ThumbUpSolid /> : <ThumbUp />}
+            <BiUpvote size={25} />
           </span>
-          <span>{upvote}</span>
         </button>
+        <span>0</span>
         <button className="flex space-x-1 items-center">
           <span className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200">
-            {userDownvoted ? (
-              <ThumbsDownSolid />
-            ) : (
-              <ThumbDown className="cursor-pointer" />
-            )}
+            <BiDownvote size={25} />
           </span>
-
-          <span>{downVote}</span>
         </button>
       </div>
       <div className="flex items-center">

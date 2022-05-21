@@ -45,12 +45,12 @@ export const Bottom: React.FC<BottomProps> = ({
           userID: user?.id,
         }
       );
-      setPost((prev) => ({ ...prev, comments: data.comment }));
+      setPost((prev) => ({ ...prev, comments: data.comments }));
       reset();
     } catch (err) {
       console.log("errr");
     } finally {
-      //   setPageLoading(false);
+      // setPageLoading(false);
     }
   }
 

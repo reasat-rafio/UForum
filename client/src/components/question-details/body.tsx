@@ -19,9 +19,6 @@ export const Body: React.FC<BodyProps> = ({ className, post }) => {
     DateTime.DATETIME_MED
   );
 
-  console.log("====================================");
-  console.log(_post.comments);
-  console.log("====================================");
   return (
     <div
       className={clsx(
@@ -30,8 +27,16 @@ export const Body: React.FC<BodyProps> = ({ className, post }) => {
       )}
     >
       <div>
-        <h1 className="text-3xl font-semibold font-mono">{_post.title}</h1>
-        <div className="text-sm">Asked {myDateTime}</div>
+        <h1 className="text-3xl font-semibold ">{_post.title}</h1>
+        <div className="text-sm flex space-x-4">
+          <span>
+            Asked Time <span className="text-secondary">{myDateTime}</span>
+          </span>
+          <span>
+            Asked By
+            <span className="text-secondary"> @{_post.postedBy.username}</span>
+          </span>
+        </div>
       </div>
       <Description
         description={_post.description}

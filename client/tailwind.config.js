@@ -18,6 +18,10 @@ module.exports = {
         "light-gray-hover": "#bababa",
         "gray-primary": "#808080",
       },
+      fontFamily: {
+        inter: "Inter, Helvetica, Arial, sans-serif",
+        roboto: ["'Roboto', sans-serif"],
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],

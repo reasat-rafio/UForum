@@ -66,7 +66,7 @@ export const Form: React.FC<FormProps> = ({
         });
 
         setUserAction(data.user);
-        router.push(`/profile/${user?.id}`);
+        router.push(`/profile/question/${user?.id}`);
         reset();
       }
 
