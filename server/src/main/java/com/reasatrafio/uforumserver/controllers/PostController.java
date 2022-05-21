@@ -65,7 +65,7 @@ public class PostController {
         return new ResponseEntity<String>("posts", HttpStatus.OK);
     }
 
-        @GetMapping("posts/{userId}")
+    @GetMapping("posts/{userId}")
     public ResponseEntity<?> getSinglePost(@PathVariable String userId) {
         HashMap<String, String> responseInJSON = new HashMap<>();
         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
@@ -73,7 +73,6 @@ public class PostController {
         Query query = new Query();
         query.addCriteria(Criteria.where("postedBy").is(userId));
         List<Post> posts =mt.find(query, Post.class);
-
 
         successResponseInJson.put("posts", posts);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();

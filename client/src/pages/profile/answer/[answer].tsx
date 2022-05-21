@@ -2,6 +2,7 @@ import { Post } from "@components/profile/question/post";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useRouter } from "next/router";
 
 interface IProps {
   data: {
@@ -28,19 +29,33 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const Answer: NextPage<IProps> = ({ data: { comments } }) => {
+  const router = useRouter();
   console.log(comments);
 
   return (
     <PrimaryWrapper>
       <div className="min-h-screen bg-light-gray grid grid-cols-12 py-32">
         <div className="col-span-9 mx-10 flex flex-col space-y-4">
+          <div>
+            {comments?.length ? (
+              <h1>{comments?.length} Answer</h1>
+            ) : (
+              <h1>No Answer</h1>
+            )}
+          </div>
           {comments?.length ? (
             comments
               .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
               .map((comment) => (
-                <div key={`${comment.post?.id}-${comment.id}`}>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => {
+                    router.push(`/question/${comment.post}`);
+                  }}
+                  key={`${comment.post?.id}-${comment.id}`}
+                >
                   <div
-                    className="border-l-4 p-4 rounded bg-white border-secondary flex space-x-2"
+                    className="border-l-4 p-4 rounded bg-white border-secondary flex space-x-2np"
                     key={comment.id}
                   >
                     <div className="w-9 h-9 rounded">

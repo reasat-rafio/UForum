@@ -3,6 +3,7 @@ import { PostCTA } from "./post-cta";
 import { PostHeader } from "./post-header";
 import { AnimatePresence, motion } from "framer-motion";
 import { Comment } from "@components/post/comment";
+import { useRouter } from "next/router";
 
 interface IProps extends IPost {
   setState: Dispatch<SetStateAction<IPost[] | undefined>>;
@@ -24,6 +25,8 @@ export const Post: React.FC<IProps> = ({
   posts,
   comments,
 }) => {
+  const router = useRouter();
+
   const [showComment, setShowComment] = useState(false);
 
   return (
@@ -40,7 +43,15 @@ export const Post: React.FC<IProps> = ({
           profilePicture={postedBy?.imageUrl}
         />
         <div className="space-y-5">
-          <h2 className="font-[700] text-xl">{title}</h2>
+          <h2
+            className="cursor-pointer hover:text-secondary 
+          transition-colors duration-200 font-[700] text-xl"
+            onClick={() => {
+              router.push(`/question/${id}`);
+            }}
+          >
+            {title}
+          </h2>
           <p className="text-base">{description}</p>
           <ul className="flex space-x-2">
             {tags?.map((tag) => (
