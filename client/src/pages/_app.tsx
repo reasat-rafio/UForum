@@ -5,6 +5,7 @@ import { ManagedUIContext, useUI } from "@contexts/ui.context";
 import { Navbar } from "@components/navbar/navbar";
 import "@fontsource/roboto";
 import AuthContext from "@contexts/user.conext";
+import Search from "@components/common/search";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {
@@ -18,6 +19,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AuthContext>
         <ManagedUIContext>
           <Navbar />
+          <Search />
           <Component {...pageProps} />
         </ManagedUIContext>
       </AuthContext>

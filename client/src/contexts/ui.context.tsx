@@ -1,9 +1,16 @@
-import React, { createContext, useContext, useState } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
+} from "react";
 
 export interface UIStateProps {
   displaySidebar: boolean;
   displayFilter: boolean;
   displayModal: boolean;
+  displaySearch: boolean;
   modalData: unknown;
   toastText: string;
   isPageLoading: boolean;
@@ -19,6 +26,7 @@ export interface UIStateProps {
   closeModal: () => void;
   setPageLoading: (props: boolean) => void;
   setComponentLoading: (props: boolean) => void;
+  setDisplaySearch: Dispatch<SetStateAction<boolean>>;
 }
 
 const UIContext = createContext<UIStateProps | unknown>(null);
@@ -28,6 +36,7 @@ export const UIProvider: React.FC = (props) => {
   const [displaySidebar, setDisplaySidebar] = useState(false);
   const [displayFilter, setDisplayFilter] = useState(false);
   const [displayModal, setDisplayModal] = useState(false);
+  const [displaySearch, setDisplaySearch] = useState(false);
   const [modalData, setModalData] = useState(null);
   const [toastText, _setToastText] = useState("");
   const [isPageLoading, _setPageLoading] = useState<boolean>(false);
@@ -55,6 +64,7 @@ export const UIProvider: React.FC = (props) => {
       toastText,
       isPageLoading,
       isComponentLoading,
+      displaySearch,
 
       openSidebar,
       closeSidebar,
@@ -68,8 +78,10 @@ export const UIProvider: React.FC = (props) => {
       setToastText,
       setPageLoading,
       setComponentLoading,
+      setDisplaySearch,
     }),
     [
+      displaySearch,
       displaySidebar,
       displayFilter,
       displayModal,

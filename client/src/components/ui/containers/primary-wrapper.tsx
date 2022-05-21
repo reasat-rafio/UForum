@@ -1,3 +1,4 @@
+import { useUI } from "@contexts/ui.context";
 import { useUser } from "@contexts/user.conext";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -26,6 +27,7 @@ const socials = [
 
 export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
   const { user } = useUser();
+  const { setDisplaySearch } = useUI();
 
   const personal_navigation = [
     {
@@ -45,15 +47,13 @@ export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
     },
   ];
 
-  const [showSearchBar, setShowSearchBar] = useState(false);
-
   return (
     <section className="grid grid-cols-12 max-w-[1920px] relative">
       <div className="col-span-2 flex flex-col h-screen sticky top-0">
         <div className="flex-1 py-[40%] flex flex-col space-y-7">
           <div
             className="flex space-x-4 py-2 pl-4 md:pl-8 2xl:pl-16 cursor-pointer"
-            onClick={() => setShowSearchBar(true)}
+            onClick={() => setDisplaySearch((prev) => !prev)}
           >
             <img src="/icons/search.svg" alt="search icon" />
             <span>Search</span>

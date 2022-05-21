@@ -17,3 +17,109 @@ body {
 .section__container {
   @apply mx-auto max-w-[1920px] px-4 md:px-8 2xl:px-16;
 }
+
+.overlay {
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 21;
+  visibility: hidden;
+  @apply w-full;
+  @apply h-full;
+  @apply flex;
+  @apply fixed;
+  @apply opacity-0;
+  @apply top-0;
+  @apply top-0;
+  transition: 0.35s ease-in-out;
+}
+
+.overlay.open {
+  @apply opacity-100;
+  visibility: visible;
+}
+
+.drawer-search {
+  transform: translate(-50%, 50px);
+}
+
+.os-theme-thin > .os-scrollbar-vertical {
+  bottom: 14px;
+  width: 14px;
+  padding: 6px 0;
+}
+
+.os-theme-thin > .os-scrollbar > .os-scrollbar-track {
+  background: transparent;
+}
+
+.os-theme-thin > .os-scrollbar-horizontal > .os-scrollbar-track:before,
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track:before {
+  content: "";
+  display: block;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track:before,
+.os-theme-thin
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:before {
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  left: 50%;
+  margin-left: -1px;
+}
+
+.os-theme-thin
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle {
+  width: 100%;
+  min-height: 15px;
+}
+
+.os-theme-thin > .os-scrollbar-vertical > .os-scrollbar-track:before,
+.os-theme-thin
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:before {
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  left: 50%;
+  margin-left: -1px;
+  border-radius: 15px;
+  background: rgba(0, 0, 0, 0.1);
+}
+.os-theme-thin
+  > .os-scrollbar
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:before {
+  content: "";
+  display: block;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 10px;
+}
+
+.os-theme-thin
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:hover:before,
+.os-theme-thin
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle.active:before {
+  width: 4px;
+  margin-left: -1px;
+  background: black;
+}
+
+.os-theme-thin.os-host-transition
+  > .os-scrollbar-vertical
+  > .os-scrollbar-track
+  > .os-scrollbar-handle:before {
+  -webkit-transition: width 0.3s, margin-left 0.3s, background 0.2s;
+  transition: width 0.3s, margin-left 0.3s, background 0.2s;
+}
