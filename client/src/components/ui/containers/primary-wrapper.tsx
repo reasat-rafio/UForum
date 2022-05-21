@@ -13,7 +13,7 @@ const menu = [
   { name: "Ranking", href: "/ranking", icon: "/icons/award.svg" },
 ];
 
-const socials = [
+export const socials = [
   { name: "github", href: "www.github.com", icon: "/icons/social/github.svg" },
   {
     name: "instagram",

@@ -1,8 +1,13 @@
-import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
+import {
+  PrimaryWrapper,
+  socials,
+} from "@components/ui/containers/primary-wrapper";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import React from "react";
 import axios from "axios";
 import { Post } from "@components/profile/question/post";
+import Link from "next/link";
+import { ProfileCard } from "@components/profile/profile-card";
 
 interface IProps {
   data: {
@@ -42,11 +47,14 @@ const Question: NextPage<IProps> = ({ data: { posts } }) => {
           )}
         </div>
 
-        <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-          laboriosam vero ipsum consequatur deleniti architecto a officia
-          distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-          earum. Assumenda, sit. Dolore.
+        <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16 relative">
+          <ProfileCard
+            imageUrl={posts[0].postedBy.imageUrl}
+            username={posts[0].postedBy.username}
+            description={
+              posts?.length ? `${posts?.length} total posts` : "No Post"
+            }
+          />
         </div>
       </div>
     </PrimaryWrapper>

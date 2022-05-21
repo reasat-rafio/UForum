@@ -1,3 +1,4 @@
+import { ProfileCard } from "@components/profile/profile-card";
 import { Post } from "@components/profile/question/post";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import axios from "axios";
@@ -50,9 +51,9 @@ const Answer: NextPage<IProps> = ({ data: { comments } }) => {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    router.push(`/question/${comment.postID}`);
+                    router.push(`/question/${comment.post}`);
                   }}
-                  key={`${comment.postID}-${comment.id}`}
+                  key={`${comment.post?.id}-${comment.id}`}
                 >
                   <div
                     className="border-l-4 p-4 rounded bg-white border-secondary flex space-x-2np"
@@ -73,10 +74,15 @@ const Answer: NextPage<IProps> = ({ data: { comments } }) => {
         </div>
 
         <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-          laboriosam vero ipsum consequatur deleniti architecto a officia
-          distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-          earum. Assumenda, sit. Dolore.
+          <ProfileCard
+            imageUrl={comments[0].user.imageUrl}
+            username={comments[0].user.username}
+            description={
+              comments?.length
+                ? `${comments?.length} total answers`
+                : "No comments"
+            }
+          />
         </div>
       </div>
     </PrimaryWrapper>
