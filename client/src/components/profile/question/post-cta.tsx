@@ -1,11 +1,7 @@
-import { ThumbDown } from "@components/icons/thumb-down";
-import { ThumbUp } from "@components/icons/thumb-up";
 import { useUI } from "@contexts/ui.context";
 import { useUser } from "@contexts/user.conext";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
-import { ThumbsDownSolid } from "@components/icons/thumb-down-solid";
-import { ThumbUpSolid } from "@components/icons/thumb-up-solid";
 import { CommentIcon } from "@components/icons/comment";
 import { BiDownvote, BiUpvote } from "react-icons/bi";
 
@@ -38,11 +34,6 @@ export const PostCTA: React.FC<PostCTAProps> = ({
   const [userUpvoted, setUserUpvoted] = useState(false);
   const [userDownvoted, setUserDownvoted] = useState(false);
 
-  const [indexOfThePost, setIndexOfThePost] = useState<number>();
-
-  const [_upvote, setUpVote] = useState(0);
-  const [_downvote, setDownvote] = useState(0);
-
   useEffect(() => {
     const userAlreadyUpvotedThisPost = likedBy?.some((usr) =>
       typeof usr === "string" ? usr === user?.id : usr.id === user?.id
@@ -57,30 +48,34 @@ export const PostCTA: React.FC<PostCTAProps> = ({
     if (userAlreadyDownvotedThisPost) {
       setUserDownvoted(true);
     }
-  }, [likedBy, dislikedBy, posts, user?.id]);
+  }, []);
 
-  const onUpvoteAction = async () => {
-    setPageLoading(true);
+  const onVoteAction = async (voteType: "UP" | "DOWN") => {
     try {
-      setPageLoading(true);
       const userId = user?.id;
       const { data }: { data: { post: IPost; user: IUser } } = await axios.post(
-        `http://localhost:8080/post/upvote/${id}`,
+        `http://localhost:8080/post/vote/${id}`,
         {
           userId,
           userUpvoted,
+          userDownvoted,
+          voteType,
         }
       );
 
-      const updatePosts = posts?.map((post) =>
-        post.id === data.post.id ? data.post : post
-      );
-      console.log(updatePosts);
+      // const updatePosts = posts?.map((post) =>
+      //   post.id === data.post.id ? data.post : post
+      // );
 
-      setState(updatePosts);
-
-      // setState((prev) => (prev[index as number] = data.post));
-      setUserUpvoted((prev) => !prev);
+      // setState(updatePosts);
+      if (voteType === "UP") {
+        setUserUpvoted((prev) => !prev);
+        setUserDownvoted(false);
+      }
+      if (voteType === "DOWN") {
+        setUserDownvoted((prev) => !prev);
+        setUserUpvoted(false);
+      }
       setUserAction(data.user);
     } catch (error: any) {
       console.log(error.response);
@@ -94,18 +89,26 @@ export const PostCTA: React.FC<PostCTAProps> = ({
       <div className="flex flex-1 space-x-3 items-center text-sm">
         <button
           disabled={isPageLoading}
-          onClick={onUpvoteAction}
+          onClick={() => onVoteAction("UP")}
           className="flex space-x-1 items-center"
         >
-          <span className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200 cursor-pointer">
-            <BiUpvote size={25} />
-          </span>
+          <BiUpvote
+            className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200 cursor-pointer"
+            size={33}
+            fill={userUpvoted ? "#F48023" : ""}
+          />
         </button>
-        <span>0</span>
-        <button className="flex space-x-1 items-center">
-          <span className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200">
-            <BiDownvote size={25} />
-          </span>
+        <span>{upvote - downVote}</span>
+        <button
+          disabled={isPageLoading}
+          onClick={() => onVoteAction("DOWN")}
+          className="flex space-x-1 items-center"
+        >
+          <BiDownvote
+            fill={userDownvoted ? "#F48023" : ""}
+            className="rounded-full hover:bg-slate-100 p-1 transition-all duration-200 cursor-pointer"
+            size={33}
+          />
         </button>
       </div>
       <div className="flex items-center">

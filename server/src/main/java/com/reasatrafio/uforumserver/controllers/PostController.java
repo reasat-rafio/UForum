@@ -43,7 +43,6 @@ public class PostController {
         }
     }
 
-
     @GetMapping("post/{postID}")
     public ResponseEntity<?> getOnePostByID(@PathVariable String postID) {
         HashMap<String, String> responseInJSON = new HashMap<>();
@@ -192,24 +191,29 @@ public class PostController {
     }
 
 
+
+
     @Setter
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    static class UpvoteReqBody {
+    static class VoteReqBody {
         String userId ;
         boolean userUpvoted;
+        boolean userDownvoted;
+        String voteType;
     }
 
-   @PostMapping("/post/upvote/{id}")
-   public ResponseEntity<?> upvote(@RequestBody String data, @PathVariable("id") String id) throws IOException {
+   @PostMapping("/post/vote/{id}")
+   public ResponseEntity<?> vote(@RequestBody String data, @PathVariable("id") String id) throws IOException {
 
        ObjectMapper mapper = new ObjectMapper();
        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-       UpvoteReqBody reqData = mapper.readValue(data.toString(), UpvoteReqBody.class);
+       VoteReqBody reqData = mapper.readValue(data.toString(), VoteReqBody.class);
 
         String userId =  reqData.getUserId();
         boolean userUpvoted = reqData.isUserUpvoted();
+        boolean userDownvoted =reqData.isUserDownvoted();
 
         Map<String, Object> successResponseInJson = new LinkedHashMap<>();
         HashMap<String, String> responseInJSON = new HashMap<>();
@@ -222,31 +226,71 @@ public class PostController {
             return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
         }
 
-        /* CHECK IF THE USER EVER LIKED ANY POST
+        /* CHECK IF THE USER EVER LIKED OR DISLIKED ANY POST
             @REASON: if the user never liked anything then user.getLikedPost().size() will return null
         */
         List<Post> userLikedPostList = new ArrayList<>();
+        List<Post> userDislikedPostList = new ArrayList<>();
+
+
         if (user.getLikedPost() != null && user.getLikedPost().size() > 0) {
             userLikedPostList = user.getLikedPost();
         } else {
-            userLikedPostList.add(findPostById.get());
+            if(reqData.getVoteType().equals("UP")){
+                userLikedPostList.add(findPostById.get());
+            }
         }
 
-        // GET ALL THE LIKED POST BY USER
+        if(user.getDislikedPost() != null && user.getDislikedPost().size() > 0) {
+            userDislikedPostList = user.getDislikedPost();
+        } else {
+            if(reqData.getVoteType().equals("DOWN")) {
+                userDislikedPostList.add(findPostById.get());
+            }
+        }
+
+        // GET ALL THE LIKED && DISLIKED POST BY USER
         List<Post> getAllLikedPostByUser = userLikedPostList;
+        List<Post> getAllDislikedPostByUser = userDislikedPostList;
 
         // UPDATE THE POST AND THE USER
-        if (!userUpvoted) {
-            findPostById.get().getLikedBy().add(user);
-            findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() + 1));
-            // IF THE USER NEVER LIKED ANY POST
-            getAllLikedPostByUser.add(findPostById.get());
-        } else {
-            findPostById.get().getLikedBy().removeIf((value) -> Objects.equals(value.getId(), user.getId()));
-            findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() - 1));
-            getAllLikedPostByUser.removeIf((post) -> Objects.equals(post.getId(), findPostById.get().getId()));
-        }
+       if(reqData.getVoteType().equals("UP")) {
+           getAllDislikedPostByUser.removeIf((post) -> Objects.equals(post.getId(), findPostById.get().getId()));
+           if(findPostById.get().getDislikedBy()  != null)
+               findPostById.get().getDislikedBy().removeIf((value) -> Objects.equals(value.getId(), user.getId()));
+
+           if (!userUpvoted) {
+               findPostById.get().getLikedBy().add(user);
+               findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() + 1));
+               // IF THE USER NEVER LIKED ANY POST
+               getAllLikedPostByUser.add(findPostById.get());
+           } else {
+               findPostById.get().getLikedBy().removeIf((value) -> Objects.equals(value.getId(), user.getId()));
+               findPostById.get().setUpvote((findPostById.get().getUpvote().intValue() - 1));
+               getAllLikedPostByUser.removeIf((post) -> Objects.equals(post.getId(), findPostById.get().getId()));
+           }
+       }
+
+       if(reqData.getVoteType().equals("DOWN")) {
+           getAllLikedPostByUser.removeIf((post) -> Objects.equals(post.getId(), findPostById.get().getId()));
+           if(findPostById.get().getLikedBy()  != null)
+               findPostById.get().getLikedBy().removeIf((value) -> Objects.equals(value.getId(), user.getId()));
+           if (!userDownvoted) {
+               List<User> usr = new ArrayList<>();
+               usr.add(user);
+               findPostById.get().setDislikedBy(usr);
+               findPostById.get().setDownVote((findPostById.get().getDownVote().intValue() + 1));
+               // IF THE USER NEVER LIKED ANY POST
+               getAllDislikedPostByUser.add(findPostById.get());
+           } else {
+               findPostById.get().getDislikedBy().removeIf((value) -> Objects.equals(value.getId(), user.getId()));
+               findPostById.get().setDownVote((findPostById.get().getUpvote().intValue() - 1));
+               getAllDislikedPostByUser.removeIf((post) -> Objects.equals(post.getId(), findPostById.get().getId()));
+           }
+       }
+
        user.setLikedPost(getAllLikedPostByUser);
+       user.setDislikedPost(getAllDislikedPostByUser);
        userRepo.save(user);
        postRepo.save(findPostById.get());
 
@@ -263,4 +307,4 @@ public class PostController {
         responseInJSON.put("message", "ERROR OF THE POST UPVOTE CONTROLLER");
         return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
     }
-}
+
