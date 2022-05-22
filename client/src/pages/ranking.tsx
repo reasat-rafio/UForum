@@ -1,18 +1,14 @@
-import { StickyInfoComponent } from "@components/home/sticky-info-component";
-import { Post } from "@components/profile/question/post";
+import { Page } from "@components/common/page";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import axios from "axios";
-import type { NextPage } from "next";
+import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Post } from "@components/profile/question/post";
 import { PostLoading } from "@components/ui/post-loading";
-import { Page } from "@components/common/page";
+import { StickyInfoComponent } from "@components/home/sticky-info-component";
 
-interface IProps {
-  posts: IPost[];
-}
-
-const Home: NextPage<IProps> = () => {
+const Ranking: NextPage = () => {
   const [posts, setPosts] = useState<IPost[] | undefined>([]);
 
   useEffect(() => {
@@ -26,7 +22,6 @@ const Home: NextPage<IProps> = () => {
     }
     fetch();
   }, [posts]);
-
   return (
     <Page>
       <PrimaryWrapper>
@@ -35,7 +30,9 @@ const Home: NextPage<IProps> = () => {
             {posts?.length ? (
               posts
                 .filter(({ removed }) => !removed)
-                .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+                .sort((a, b) =>
+                  a.upvote - a.downVote < b.upvote - b.downVote ? 1 : -1
+                )
                 .slice(0, 5)
                 .map((post) => (
                   <Post
@@ -51,16 +48,18 @@ const Home: NextPage<IProps> = () => {
           </motion.div>
 
           <StickyInfoComponent
-            posts={posts?.sort((a, b) =>
-              a.upvote - a.downVote > b.upvote - b.downVote ? -1 : 1
-            )}
+            header="Must-commented posts"
+            posts={posts
+              ?.filter((e) => e.comments?.length)
+              ?.sort((a, b) =>
+                a.comments?.length > b.comments?.length ? -1 : 1
+              )
+              .slice(0, 5)}
             className="col-span-3 pr-4 md:pr-8 2xl:pr-16"
-            header="Must-upvoted posts"
           />
         </div>
       </PrimaryWrapper>
     </Page>
   );
 };
-
-export default Home;
+export default Ranking;

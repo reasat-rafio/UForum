@@ -35,14 +35,12 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
   );
 
   const onDeleteAction = async () => {
-    setPageLoading(true);
     try {
       await axios.post(`http://localhost:8080/post/delete/${id}`);
       setState((prev) => prev?.filter((post) => post.id !== id));
     } catch (error: any) {
       console.log(error.response);
     } finally {
-      setPageLoading(false);
     }
   };
 
@@ -51,8 +49,8 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
   };
 
   const menuItems = [
-    { label: "edit", icon: <Delete />, action: onEditAction },
-    { label: "delete", icon: <Edit />, action: onDeleteAction },
+    { label: "edit", icon: <Edit />, action: onEditAction },
+    { label: "delete", icon: <Delete />, action: onDeleteAction },
   ];
 
   return (
@@ -69,7 +67,7 @@ export const PostHeader: React.FC<PostHeaderProps> = ({
         </div>
       </div>
 
-      {router.pathname !== "/" && (
+      {router.pathname !== "/" && router.pathname !== "/ranking" && (
         <div className="relative">
           <Menu>
             <Menu.Button className="p-2 hover:bg-gray-200 transition-all duration-200 rounded-full">

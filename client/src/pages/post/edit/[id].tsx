@@ -2,6 +2,7 @@ import { Form } from "@components/post/form";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import axios from "axios";
+import { ProfileCard } from "@components/profile/profile-card";
 
 interface IProps {
   data: {
@@ -33,10 +34,11 @@ const Edit: NextPage<IProps> = ({ data: { post } }) => {
         <Form actonType="edit" data={post} className="col-span-9 mx-10" />
 
         <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-          laboriosam vero ipsum consequatur deleniti architecto a officia
-          distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-          earum. Assumenda, sit. Dolore.
+          <ProfileCard
+            imageUrl={post.postedBy.imageUrl}
+            username={post.postedBy.username}
+            description={""}
+          />
         </div>
       </div>
     </PrimaryWrapper>

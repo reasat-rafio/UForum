@@ -9,10 +9,15 @@ const Submit: NextPage = () => {
         <Form className="col-span-9 mx-10" />
 
         <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-          laboriosam vero ipsum consequatur deleniti architecto a officia
-          distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-          earum. Assumenda, sit. Dolore.
+          {/* <ProfileCard
+            imageUrl={comments[0].user.imageUrl}
+            username={comments[0].user.username}
+            description={
+              comments?.length
+                ? `${comments?.length} total answers`
+                : "No comments"
+            }
+          /> */}
         </div>
       </div>
     </PrimaryWrapper>

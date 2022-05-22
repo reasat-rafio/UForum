@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 interface StickyInfoComponentProps {
   className?: string;
   posts: IPost[] | undefined;
+  header: string;
 }
 
 const data = [
@@ -29,6 +30,7 @@ const data = [
 export const StickyInfoComponent: React.FC<StickyInfoComponentProps> = ({
   className,
   posts,
+  header,
 }) => {
   return (
     <div className={clsx(className, "relative")}>
@@ -36,18 +38,14 @@ export const StickyInfoComponent: React.FC<StickyInfoComponentProps> = ({
         <motion.div>
           <header className="flex items-center space-x-2 py-2 border-b border-b-slate-200">
             <img className="h-8" src={"/icons/star.svg"} alt="" />
-            <h4 className="text-base">Must-upvoted posts</h4>
+            <h4 className="text-base">{header}</h4>
           </header>
           <ul className="list-disc list-inside py-3 space-y-1">
-            {posts
-              ?.sort((a, b) =>
-                a.upvote - a.downVote > b.upvote - b.downVote ? -1 : 1
-              )
-              .map(({ title, id }) => (
-                <li className="text-sm text-blue-600 hover:underline" key={id}>
-                  <a href={`/question/${id}`}>{title}</a>
-                </li>
-              ))}
+            {posts?.map(({ title, id }) => (
+              <li className="text-sm text-blue-600 hover:underline" key={id}>
+                <a href={`/question/${id}`}>{title}</a>
+              </li>
+            ))}
           </ul>
         </motion.div>
         {data.map(({ header, posts }) => (
