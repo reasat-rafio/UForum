@@ -8,10 +8,10 @@ public class PostCollectionException extends Exception {
     }
 
     public static String NotFoundException(String id) {
-        return "Todo with "+id+" not found!";
+        return "Post with "+id+" not found!";
     }
 
-    public static String TodoAlreadyExists() {
-        return "Todo with given name already exists";
+    public static String PostAlreadyExists() {
+        return "Post with given name already exists";
     }
 }
