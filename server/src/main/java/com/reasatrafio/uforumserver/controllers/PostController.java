@@ -4,10 +4,13 @@ import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.reasatrafio.uforumserver.exceptions.PostCollectionException;
 import com.reasatrafio.uforumserver.models.Post;
 import com.reasatrafio.uforumserver.models.User;
 import com.reasatrafio.uforumserver.repository.PostRepository;
 import com.reasatrafio.uforumserver.repository.UserRepository;
+import com.reasatrafio.uforumserver.services.PostService;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,59 +35,32 @@ public class PostController {
     private PostRepository postRepo;
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private PostService postService;
 
     @GetMapping("/posts")
     public ResponseEntity<?> getAllPost() {
-        List<Post> posts = postRepo.findAll();
-        if (posts.size() > 0) {
-            return new ResponseEntity<List<Post>>(posts, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>("No Post Found", HttpStatus.NOT_FOUND);
-        }
+        List<Post> posts = postService.getAllPosts();
+         return new ResponseEntity<>(posts, posts.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("post/{postID}")
-    public ResponseEntity<?> getOnePostByID(@PathVariable String postID) {
-        HashMap<String, String> responseInJSON = new HashMap<>();
-        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
-
-        Optional<Post> pst = postRepo.findById(postID);
-
-        if (pst.isPresent()) {
-            successResponseInJson.put("post", pst.get());
-            ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
-            try {
-                return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+    public ResponseEntity<?> getPostByID(@PathVariable String postID) {
+        try {
+            return new ResponseEntity<>(postService.getPostByID(postID), HttpStatus.OK);
+        } catch (PostCollectionException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<String>("posts", HttpStatus.OK);
     }
 
     @GetMapping("posts/{userId}")
-    public ResponseEntity<?> getSinglePost(@PathVariable String userId) {
-        HashMap<String, String> responseInJSON = new HashMap<>();
-        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
-
-        Query query = new Query();
-        query.addCriteria(Criteria.where("postedBy").is(userId));
-        List<Post> posts = mt.find(query, Post.class);
-
-        successResponseInJson.put("posts", posts);
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-
-        try {
-            return new ResponseEntity<String>(ow.writeValueAsString(successResponseInJson), HttpStatus.OK);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        return new ResponseEntity<String>("posts", HttpStatus.OK);
+    public ResponseEntity<?> getAllPostFromUser(@PathVariable String userId) {
+       try {
+           return new ResponseEntity<>(postService.getAllPostFromUser(userId), HttpStatus.OK);
+       } catch (PostCollectionException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+       }
     }
-
 
     @Setter
     @Getter
@@ -139,6 +115,57 @@ public class PostController {
         }
         responseInJSON.put("message", "User Doesn't Exist");
         return new ResponseEntity<HashMap<String, String>>(responseInJSON, HttpStatus.NOT_FOUND);
+    }
+
+
+    @Setter
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class BookmarkReqBody {
+        String userId;
+        boolean userBookmarked;
+    }
+    @PostMapping("post/bookmark/{postID}")
+    public ResponseEntity<?> bookmark(@RequestBody String data,
+                                      @PathVariable("postID") String postID) throws JsonProcessingException {
+        HashMap<String, String> responseInJSON = new HashMap<>();
+        Map<String, Object> successResponseInJson = new LinkedHashMap<>();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+        BookmarkReqBody reqData = mapper.readValue(data.toString(), BookmarkReqBody.class);
+
+        Optional<User> user = userRepo.findById(reqData.getUserId());
+        Optional<Post> post = postRepo.findById(postID);
+
+        List<Post> allBookmarks;
+
+        if(user.isEmpty()){
+            return new ResponseEntity<String>("USER NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+        if(post.isEmpty()){
+            return new ResponseEntity<String>("POST NOT FOUND", HttpStatus.NOT_FOUND);
+        }
+
+        if(!reqData.isUserBookmarked()) {
+            if(user.get().getBookmarks() != null){
+                allBookmarks = user.get().getBookmarks();
+                allBookmarks.add(post.get());
+            } else {
+                allBookmarks = new ArrayList<>();
+                allBookmarks.add(post.get());
+            }
+        } else {
+            allBookmarks = user.get().getBookmarks();
+            user.get().getBookmarks().removeIf((value) -> Objects.equals(value.getId(), post.get().getId()));
+        }
+
+
+
+        user.get().setBookmarks(allBookmarks);
+        userRepo.save(user.get());
+        return new ResponseEntity<User>(user.get(), HttpStatus.OK);
     }
 
     @PostMapping("/post/delete/{id}")

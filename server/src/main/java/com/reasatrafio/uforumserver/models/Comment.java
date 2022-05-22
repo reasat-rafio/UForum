@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.List;
@@ -23,6 +24,7 @@ public class Comment {
     User user;
     @DBRef
     Post post;
+    String postID;
     String comment;
     private Number upvote;
     private Number downVote;
@@ -34,4 +36,5 @@ public class Comment {
     List<User> dislikedBy;
     private Date createdAt;
     private Date updatedAt;
+
 }

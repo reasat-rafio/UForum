@@ -99,6 +99,10 @@ public class CommentController {
         query.addCriteria(Criteria.where("user").is(userId));
         List<Comment> comments =mt.find(query, Comment.class);
 
+        for(Comment comment : comments) {
+            comment.setPostID(comment.getPost().getId());
+        }
+
         successResponseInJson.put("comments", comments);
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
 

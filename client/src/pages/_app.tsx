@@ -23,9 +23,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           <ManagedUIContext>
             <Navbar />
             <Search />
-            <RouteGuard>
-              <Component {...pageProps} />
-            </RouteGuard>
+            {/* <RouteGuard> */}
+            <Component {...pageProps} />
+            {/* </RouteGuard> */}
           </ManagedUIContext>
         </PostsContext>
       </AuthContext>
