@@ -7,6 +7,7 @@ import "@fontsource/roboto";
 import AuthContext from "@contexts/user.conext";
 import Search from "@components/common/search";
 import PostsContext from "@contexts/post.context";
+import { RouteGuard } from "@components/common/route-guard";
 
 function handleExitComplete() {
   if (typeof window !== "undefined") {
@@ -20,9 +21,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AuthContext>
         <PostsContext>
           <ManagedUIContext>
-            <Navbar />
-            <Search />
-            <Component {...pageProps} />
+            <RouteGuard>
+              <Navbar />
+              <Search />
+              <Component {...pageProps} />
+            </RouteGuard>
           </ManagedUIContext>
         </PostsContext>
       </AuthContext>
