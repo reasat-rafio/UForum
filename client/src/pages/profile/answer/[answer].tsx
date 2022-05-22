@@ -1,6 +1,8 @@
 import { ProfileCard } from "@components/profile/profile-card";
 import { Post } from "@components/profile/question/post";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
+import { useUI } from "@contexts/ui.context";
+import { useUser } from "@contexts/user.conext";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -31,7 +33,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
 const Answer: NextPage<IProps> = ({ data: { comments } }) => {
   const router = useRouter();
-  console.log(comments);
+
+  const { user } = useUser();
 
   return (
     <PrimaryWrapper>
@@ -75,13 +78,9 @@ const Answer: NextPage<IProps> = ({ data: { comments } }) => {
 
         <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
           <ProfileCard
-            imageUrl={comments[0].user.imageUrl}
-            username={comments[0].user.username}
-            description={
-              comments?.length
-                ? `${comments?.length} total answers`
-                : "No comments"
-            }
+            imageUrl={user?.imageUrl as string}
+            username={user?.username as string}
+            description={""}
           />
         </div>
       </div>

@@ -9,9 +9,15 @@ const RouteGuard = ({ children }: any) => {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(false);
 
+  console.log(user);
+
   useEffect(() => {
     // on initial load - run auth check
-    authCheck(router.asPath);
+    if (user) {
+      setAuthorized(true);
+    } else {
+      authCheck(router.asPath);
+    }
 
     // on route change start - hide page content by setting authorized to false
     const hideContent = () => setAuthorized(false);
@@ -27,13 +33,14 @@ const RouteGuard = ({ children }: any) => {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [user]);
 
   function authCheck(url: string) {
     // redirect to login page if accessing a private page and not logged in
     const publicPaths = ["/", "/ranking", "/auth/register", "/auth/login"];
     const path = url.split("?")[0];
-    if (!user && !publicPaths.includes(path)) {
+
+    if (!user?.username && !publicPaths.includes(path)) {
       setAuthorized(false);
       router.push({
         pathname: "/auth/register",
