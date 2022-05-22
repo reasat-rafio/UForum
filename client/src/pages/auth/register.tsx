@@ -47,9 +47,7 @@ const Register: NextPage = () => {
         verified: false,
         imageUrl,
       });
-      console.log("====================================");
-      console.log(data.data);
-      console.log("====================================");
+
       setUserAction(data.data);
       reset();
       router.push("/");
@@ -164,6 +162,7 @@ const Register: NextPage = () => {
               Confirm Password
             </label>
             <Input
+              type="password"
               placeholder="Repeat password"
               {...register("confirmPassword", {
                 required: `repeat password is required`,

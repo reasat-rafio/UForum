@@ -4,6 +4,7 @@ import { PostHeader } from "./post-header";
 import { AnimatePresence, motion } from "framer-motion";
 import { Comment } from "@components/post/comment";
 import { useRouter } from "next/router";
+import { truncate } from "@libs/helpers";
 
 interface IProps extends IPost {
   setState: Dispatch<SetStateAction<IPost[] | undefined>>;
@@ -52,7 +53,7 @@ export const Post: React.FC<IProps> = ({
           >
             {title}
           </h2>
-          <p className="text-base">{description}</p>
+          <p className="text-base">{truncate(description, 800)}</p>
           <ul className="flex space-x-2">
             {tags?.map((tag) => (
               <li
