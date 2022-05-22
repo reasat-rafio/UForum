@@ -75,6 +75,7 @@ export const Post: React.FC<IProps> = ({
           dislikedBy={dislikedBy}
           posts={posts}
           commentLength={comments?.length ?? 0}
+          bookmarks={postedBy.bookmarks}
         />
       </div>
       <AnimatePresence exitBeforeEnter>

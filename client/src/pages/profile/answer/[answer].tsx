@@ -51,7 +51,7 @@ const Answer: NextPage<IProps> = ({ data: { comments } }) => {
                 <div
                   className="cursor-pointer"
                   onClick={() => {
-                    router.push(`/question/${comment.post}`);
+                    router.push(`/question/${comment.postID}`);
                   }}
                   key={`${comment.post?.id}-${comment.id}`}
                 >

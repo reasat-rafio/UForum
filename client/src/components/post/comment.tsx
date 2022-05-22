@@ -38,7 +38,7 @@ export const Comment: React.FC<CommentProps> = ({
   const { setPageLoading } = useUI();
 
   async function onSubmit({ comment }: IFormInput) {
-    setPageLoading(true);
+    // setPageLoading(true);
     try {
       const { data } = await axios.post(
         `http://localhost:8080/comment/create`,
@@ -57,7 +57,7 @@ export const Comment: React.FC<CommentProps> = ({
     } catch (error: any) {
       console.log(error.response);
     } finally {
-      setPageLoading(false);
+      // setPageLoading(false);
     }
   }
 

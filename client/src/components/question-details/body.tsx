@@ -14,7 +14,7 @@ interface BodyProps {
 export const Body: React.FC<BodyProps> = ({ className, post }) => {
   const [_post, setPost] = useState(post);
 
-  const date = new Date(+_post.createdAt / 1000);
+  const date = new Date(+_post?.createdAt / 1000);
   const myDateTime = DateTime.fromSeconds(Number(date)).toLocaleString(
     DateTime.DATETIME_MED
   );
@@ -39,9 +39,16 @@ export const Body: React.FC<BodyProps> = ({ className, post }) => {
         </div>
       </div>
       <Description
+        id={_post.id}
         description={_post.description}
         myDateTime={myDateTime}
         postedBy={_post.postedBy}
+        // vote={_post.upvote - _post.downVote}
+        likedBy={_post.likedBy}
+        dislikedBy={_post.dislikedBy}
+        setPost={setPost}
+        upvote={_post.upvote}
+        downVote={_post.downVote}
       />
       <Bottom postID={_post.id} comments={_post.comments} setPost={setPost} />
     </div>

@@ -44,9 +44,9 @@ export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
       icon: "/icons/message-circle.svg",
     },
     {
-      name: "Your likes & votes",
-      href: "/profile/likes-votes",
-      icon: "/icons/heart.svg",
+      name: "Your bookmarks",
+      href: `/profile/bookmark/${user?.id}`,
+      icon: "/icons/bookmark.svg",
     },
   ];
 
@@ -100,7 +100,11 @@ export const PrimaryWrapper: React.FC<PrimaryWrapperProps> = ({ children }) => {
                 {personal_navigation.map(({ href, icon, name }) => (
                   <Link key={name} href={href}>
                     <a className="flex space-x-4 hover:bg-secondary hover:bg-opacity-20 transition-all duration-300 hover:text-secondary py-2 pl-4 md:pl-8 2xl:pl-16 relative group hover:border-l-[6px] border-secondary cursor-pointer text-black">
-                      <img src={icon} alt={`${name} icon`} />
+                      <img
+                        className="h-6 w-6"
+                        src={icon}
+                        alt={`${name} icon`}
+                      />
                       <span className="text-[13px] font-medium">{name}</span>
                       {/* <div className="absolute h-full w-1 group-hover:block hidden bg-secondary left-0 top-0" /> */}
                     </a>

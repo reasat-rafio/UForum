@@ -4,6 +4,7 @@ interface IUser {
   username: string;
   verified: boolean;
   posts: IPost[];
+  bookmarks: IPost[];
   comments: IComment[];
   followings: ITag[];
   createdAt: string;

@@ -1,24 +1,12 @@
 import React from "react";
 import clsx from "clsx";
-
+import { motion } from "framer-motion";
 interface StickyInfoComponentProps {
   className?: string;
+  posts: IPost[] | undefined;
 }
 
 const data = [
-  {
-    header: { title: "Must-read posts", icon: "/icons/star.svg" },
-    posts: [
-      {
-        name: "Please read rules before you start working on a platform",
-        url: "/",
-      },
-      {
-        name: "Vision & Strategy of Alemhelp",
-        url: "/",
-      },
-    ],
-  },
   {
     header: { title: "Featured links", icon: "/icons/link.svg" },
     posts: [
@@ -40,10 +28,28 @@ const data = [
 
 export const StickyInfoComponent: React.FC<StickyInfoComponentProps> = ({
   className,
+  posts,
 }) => {
   return (
     <div className={clsx(className, "relative")}>
       <div className="bg-white sticky top-20 p-5 rounded flex flex-col">
+        <motion.div>
+          <header className="flex items-center space-x-2 py-2 border-b border-b-slate-200">
+            <img className="h-8" src={"/icons/star.svg"} alt="" />
+            <h4 className="text-base">Must-upvoted posts</h4>
+          </header>
+          <ul className="list-disc list-inside py-3 space-y-1">
+            {posts
+              ?.sort((a, b) =>
+                a.upvote - a.downVote > b.upvote - b.downVote ? -1 : 1
+              )
+              .map(({ title, id }) => (
+                <li className="text-sm text-blue-600 hover:underline" key={id}>
+                  <a href={`/question/${id}`}>{title}</a>
+                </li>
+              ))}
+          </ul>
+        </motion.div>
         {data.map(({ header, posts }) => (
           <div key={header.title}>
             <header className="flex items-center space-x-2 py-2 border-b border-b-slate-200">

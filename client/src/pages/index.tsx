@@ -36,6 +36,7 @@ const Home: NextPage<IProps> = () => {
               posts
                 .filter(({ removed }) => !removed)
                 .sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+                .slice(0, 5)
                 .map((post) => (
                   <Post
                     key={post.id}
@@ -49,7 +50,10 @@ const Home: NextPage<IProps> = () => {
             )}
           </motion.div>
 
-          <StickyInfoComponent className="col-span-3 pr-4 md:pr-8 2xl:pr-16" />
+          <StickyInfoComponent
+            posts={posts}
+            className="col-span-3 pr-4 md:pr-8 2xl:pr-16"
+          />
         </div>
       </PrimaryWrapper>
     </Page>

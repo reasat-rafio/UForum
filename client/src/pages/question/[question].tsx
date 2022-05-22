@@ -1,8 +1,11 @@
 import { Page } from "@components/common/page";
+import { StickyInfoComponent } from "@components/home/sticky-info-component";
 import { Body } from "@components/question-details/body";
 import { PrimaryWrapper } from "@components/ui/containers/primary-wrapper";
+import { usePost } from "@contexts/post.context";
 import axios from "axios";
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { useState } from "react";
 
 interface IProps {
   data: {
@@ -31,6 +34,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 const Question: NextPage<IProps> = ({ data: { post } }) => {
+  const { posts } = usePost();
+
   return (
     <Page>
       <PrimaryWrapper>
@@ -40,12 +45,10 @@ const Question: NextPage<IProps> = ({ data: { post } }) => {
             post={post}
           />
 
-          <div className="col-span-3 pr-4 md:pr-8 2xl:pr-16">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut unde,
-            laboriosam vero ipsum consequatur deleniti architecto a officia
-            distinctio, dolor dignissimos eligendi soluta odio, quaerat sint
-            earum. Assumenda, sit. Dolore.
-          </div>
+          <StickyInfoComponent
+            posts={posts as IPost[]}
+            className="col-span-3 pr-4 md:pr-8 2xl:pr-16"
+          />
         </div>
       </PrimaryWrapper>
     </Page>
