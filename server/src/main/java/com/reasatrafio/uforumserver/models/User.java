@@ -10,10 +10,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.HashSet;
 
 @Setter
 @Getter
@@ -29,6 +30,8 @@ public class User {
     @Indexed(unique = true)
     private String username;
     private String password;
+    @DBRef
+    private Set<Role> roles =  new HashSet<>();
     private boolean verified;
     private String imageUrl;
     @DBRef

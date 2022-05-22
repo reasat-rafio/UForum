@@ -47,10 +47,10 @@ public class UserService {
     
     public User register(User user) throws UserCollectionException {
         List<User> checkByEmail = userRepo.findByEmail(user.getEmail());
-        List<User> checkByUsername = userRepo.findByUsername(user.getUsername());
+        Optional<User> checkByUsername = userRepo.findByUsername(user.getUsername());
 
         boolean emailExist = checkByEmail.size() >= 1;
-        boolean usernameExist = checkByUsername.size() >= 1;
+        boolean usernameExist = checkByUsername.isPresent();
 
         if (emailExist)
             throw new UserCollectionException(UserCollectionException.EmailTaken());

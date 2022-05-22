@@ -1,7 +1,4 @@
 package com.reasatrafio.uforumserver.controllers;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.reasatrafio.uforumserver.exceptions.UserCollectionException;
 import com.reasatrafio.uforumserver.models.User;
 import com.reasatrafio.uforumserver.repository.UserRepository;
@@ -53,7 +50,7 @@ public class UserController {
     @PostMapping("/user/register")
     public ResponseEntity<?> register(@RequestBody User user){
         try {
-            return new ResponseEntity<>(userService.register(user), HttpStatus.OK)
+            return new ResponseEntity<>(userService.register(user), HttpStatus.OK);
         } catch (UserCollectionException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
